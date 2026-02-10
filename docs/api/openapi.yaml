@@ -1,0 +1,449 @@
+openapi: 3.0.0
+info:
+  title: HybridVectorDB API
+  description: |
+    High-performance hybrid CPU/GPU vector database with intelligent query routing.
+    Provides vector similarity search with automatic CPU/GPU optimization,
+    comprehensive benchmarking, and production-ready deployment.
+    
+    Version 0.5.0 includes C++ optimizations, zero-copy memory transfers,
+    advanced performance monitoring, and enterprise-grade security.
+  version: 0.5.0
+  contact:
+    name: HybridVectorDB Team
+    email: support@hybridvectordb.com
+    url: https://github.com/hybridvectordb
+  license: MIT
+  x-logo: https://hybridvectordb.com/logo.png
+
+servers:
+  - url: http://localhost:8080
+    description: Development server
+  - url: https://api.hybridvectordb.com
+    description: Production API
+
+paths:
+  /vectors:
+    post:
+      summary: Add vectors to the database
+      operationId: addVectors
+      tags:
+        - name: Vectors
+        - name: Database
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vectors'
+      responses:
+        '200':
+          description: Vectors added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /search:
+    post:
+      summary: Search for similar vectors
+      operationId: searchVectors
+      tags:
+        - name: Search
+        - name: Database
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /health:
+    get:
+      summary: Health check endpoint
+      operationId: healthCheck
+      tags:
+        - name: Health
+        - name: Monitoring
+      responses:
+        '200':
+          description: Service health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /metrics:
+    get:
+      summary: Get performance metrics
+      operationId: getMetrics
+      tags:
+        - name: Metrics
+        - name: Monitoring
+      responses:
+        '200':
+          description: Performance metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /benchmark:
+    post:
+      summary: Run comprehensive benchmark
+      operationId: runBenchmark
+      tags:
+        - name: Benchmark
+        - name: Performance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BenchmarkRequest'
+      responses:
+        '200':
+          description: Benchmark results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BenchmarkResponse'
+        '400':
+          description: Invalid benchmark configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Benchmark execution failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    VectorData:
+      type: object
+      required:
+        - id
+        - embedding
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the vector
+        embedding:
+          type: array
+          items:
+            type: number
+          description: Vector embedding values
+          minItems: 1
+        metadata:
+          type: object
+          description: Optional metadata for the vector
+          additionalProperties: true
+
+    Vectors:
+      type: object
+      required:
+        - vectors
+      properties:
+        vectors:
+          type: array
+          items:
+            $ref: '#/components/schemas/VectorData'
+
+    AddResponse:
+      type: object
+      properties:
+        added_count:
+          type: integer
+          description: Number of vectors successfully added
+        total_count:
+          type: integer
+          description: Total number of vectors in request
+        ids:
+          type: array
+          items:
+            type: string
+          description: IDs of added vectors
+
+    SearchRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: array
+          items:
+            type: number
+          description: Query vector(s)
+        k:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 10
+          description: Number of results to return
+        use_gpu:
+          type: boolean
+          default: false
+          description: Force GPU usage
+        include_metadata:
+          type: boolean
+          default: true
+          description: Include metadata in results
+
+    SearchResult:
+      type: object
+      required:
+        - id
+        - distance
+      properties:
+        id:
+          type: string
+          description: Vector identifier
+        distance:
+          type: number
+          description: Distance to query vector
+        metadata:
+          type: object
+          description: Vector metadata
+          additionalProperties: true
+
+    SearchResponse:
+      type: object
+      required:
+        - results
+        - total_results
+        - search_time_ms
+        - index_used
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+        total_results:
+          type: integer
+          description: Total number of results returned
+        search_time_ms:
+          type: number
+          description: Time taken for search in milliseconds
+        index_used:
+          type: string
+          description: Which index was used (cpu_flat, gpu_flat, etc.)
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+        - uptime_seconds
+        - database
+        - version
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+          description: Overall health status
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of health check
+        uptime_seconds:
+          type: number
+          description: Server uptime in seconds
+        database:
+          type: string
+          description: Database connection status
+        version:
+          type: string
+          description: Service version
+
+    MetricsResponse:
+      type: object
+      required:
+        - requests_total
+        - requests_success
+        - requests_failed
+        - avg_response_time
+        - uptime_seconds
+        - database_stats
+      properties:
+        requests_total:
+          type: integer
+          description: Total number of requests
+        requests_success:
+          type: integer
+          description: Number of successful requests
+        requests_failed:
+          type: integer
+          description: Number of failed requests
+        avg_response_time:
+          type: number
+          description: Average response time in milliseconds
+        uptime_seconds:
+          type: number
+          description: Server uptime in seconds
+        database_stats:
+          type: object
+          description: Database statistics
+
+    BenchmarkRequest:
+      type: object
+      required:
+        - config
+      properties:
+        config:
+          type: object
+          description: Benchmark configuration
+          properties:
+            num_vectors:
+              type: integer
+              minimum: 100
+              default: 10000
+              description: Number of vectors to generate
+            num_queries:
+              type: integer
+              minimum: 100
+              default: 1000
+              description: Number of queries to perform
+            k_values:
+              type: array
+              items:
+                type: integer
+                minimum: 1
+                maximum: 1000
+              default: [10, 50, 100]
+              description: K values to test
+            batch_sizes:
+              type: array
+              items:
+                type: integer
+                minimum: 1
+                maximum: 1000
+              default: [1, 10, 50, 100]
+              description: Batch sizes to test
+            iterations:
+              type: integer
+              minimum: 1
+              default: 3
+              description: Number of benchmark iterations
+            enable_profiling:
+              type: boolean
+              default: true
+              description: Enable detailed profiling
+
+    BenchmarkResponse:
+      type: object
+      required:
+        - results
+        - summary
+        - config
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BenchmarkResult'
+        summary:
+          type: object
+          description: Summary of benchmark results
+        config:
+          type: object
+          description: Configuration used for benchmark
+
+    BenchmarkResult:
+      type: object
+      required:
+        - iteration
+        - add_time_ms
+        - search_time_ms
+        - add_throughput_vps
+        - search_throughput_qps
+        - overall_throughput_ops
+        - memory_usage_bytes
+        - recall_at_k
+        - precision_at_k
+        - f1_score
+      properties:
+        iteration:
+          type: integer
+          description: Benchmark iteration number
+        add_time_ms:
+          type: number
+          description: Time taken to add vectors in milliseconds
+        search_time_ms:
+          type: number
+          description: Time taken for search in milliseconds
+        add_throughput_vps:
+          type: number
+          description: Vectors added per second
+        search_throughput_qps:
+          type: number
+          description: Queries processed per second
+        overall_throughput_ops:
+          type: number
+          description: Overall operations per second
+        memory_usage_bytes:
+          type: integer
+          description: Memory usage in bytes
+        recall_at_k:
+          type: number
+          description: Recall at k
+        precision_at_k:
+          type: number
+          description: Precision at k
+        f1_score:
+          type: number
+          description: F1 score
+
+    Error:
+      type: object
+      required:
+        - error
+        - timestamp
+        - details
+      properties:
+        error:
+          type: string
+          description: Error message
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+        details:
+          type: object
+          description: Additional error details

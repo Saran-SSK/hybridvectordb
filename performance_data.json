@@ -1,0 +1,2001 @@
+[
+  {
+    "operation_name": "add_vectors",
+    "duration_ms": 6.6967010498046875,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 1000,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 0.25582313537597656,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 1,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.660844802856445,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 25,
+      "k": 25,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 29.324054718017578,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 100,
+      "k": 50,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.3004283905029297,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.1647682189941406,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.700422286987305,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.4720897674560547,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.2799243927001953,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.1778812408447266,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.7708282470703125,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.2541751861572266,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.4780502319335938,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.6575794219970703,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.7145614624023438,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.29081916809082,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.1516551971435547,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.1464099884033203,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.6745071411132812,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.972219467163086,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.4685134887695312,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.255128860473633,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.5512447357177734,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.3621063232421875,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.4317970275878906,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.3097267150878906,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.1938552856445312,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.476381301879883,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.168272018432617,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.304004669189453,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.5381317138671875,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.173351287841797,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.5839080810546875,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.8406848907470703,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.5817623138427734,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.190755844116211,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.5703182220458984,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.181861877441406,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 5.251407623291016,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.3745765686035156,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.2455921173095703,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.277944564819336,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.8933753967285156,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.7224292755126953,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 20,
+      "k": 30,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 0.6937980651855469,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 5,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "small_batch_search",
+    "duration_ms": 0.7619857788085938,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 5
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 31.520605087280273,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 100,
+      "k": 50,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "large_batch_search",
+    "duration_ms": 32.58800506591797,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 100
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 0.9462833404541016,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 16,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 0.9152889251708984,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 16,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 1.2879371643066406,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 16,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 1.2924671173095703,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 16,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 1.4948844909667969,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 16,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 2.2411346435546875,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 32,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 2.053976058959961,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 32,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 1.9919872283935547,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 32,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 1.9841194152832031,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 32,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 1.8236637115478516,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 32,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.94837760925293,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 64,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.9594173431396484,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 64,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.549741744995117,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 64,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.916025161743164,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 64,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.7149658203125,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 64,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 7.510900497436523,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 128,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 9.996175765991211,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 128,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 8.15129280090332,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 128,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 10.2386474609375,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 128,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 8.991718292236328,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 128,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 16.6471004486084,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 256,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 16.07537269592285,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 256,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 15.680074691772461,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 256,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 36.852121353149414,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 256,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 15.38991928100586,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 256,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.374814987182617,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.3130645751953125,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.283905029296875,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 10,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 6.951332092285156,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 25,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 7.251262664794922,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 25,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 6.714820861816406,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 25,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 13.297319412231445,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 50,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 14.766931533813477,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 50,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 14.23192024230957,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 50,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 29.889583587646484,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 100,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 26.686429977416992,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 100,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 29.34741973876953,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 100,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 54.48007583618164,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 200,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 55.394649505615234,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 200,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 52.57081985473633,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 50,
+      "k": 200,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 1.2505054473876953,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 10,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 1.6336441040039062,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 13,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 2.288341522216797,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 16,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 2.144336700439453,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 19,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.114461898803711,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 22,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 2.9449462890625,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 25,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 3.314971923828125,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 28,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 5.220890045166016,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 31,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.320383071899414,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 34,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.385948181152344,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 37,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.805326461791992,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 40,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 5.226612091064453,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 43,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 4.8274993896484375,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 46,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 7.7362060546875,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 49,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 7.33494758605957,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 52,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 30.41386604309082,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 55,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 9.03940200805664,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 58,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 7.611513137817383,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 61,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 10.129451751708984,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 64,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 8.228063583374023,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 67,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 10.603666305541992,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 70,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 9.08041000366211,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 73,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 10.132551193237305,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 76,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 9.761333465576172,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 79,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 9.383678436279297,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 82,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 10.860204696655273,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 85,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 9.890317916870117,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 88,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 11.548519134521484,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 91,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 11.723518371582031,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 94,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  },
+  {
+    "operation_name": "search_vectors",
+    "duration_ms": 11.595726013183594,
+    "memory_before_mb": 0.0,
+    "memory_after_mb": 0.0,
+    "memory_delta_mb": 0.0,
+    "cpu_usage_before": 0.0,
+    "cpu_usage_after": 0.0,
+    "gpu_usage_before": 0.0,
+    "gpu_usage_after": 0.0,
+    "metadata": {
+      "batch_size": 97,
+      "k": 20,
+      "decision": "cpu",
+      "reasoning": "GPU not available"
+    }
+  }
+]
