@@ -1,0 +1,4 @@
+# GPU dependencies
+faiss-gpu>=1.7.4
+pynvml>=11.0.0
+nvidia-ml-py>=11.0.0

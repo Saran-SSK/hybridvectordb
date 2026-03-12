@@ -1,0 +1,162 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  test-python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, '3.10', '3.11']
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev,all]"
+    
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        flake8 hybridvectordb/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 hybridvectordb/ --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+    
+    - name: Test with pytest
+      run: |
+        pytest tests/ -v --cov=hybridvectordb --cov-report=xml
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+
+  test-cpp:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake build-essential libfaiss-dev libopenblas-dev
+    
+    - name: Build C++ tests
+      run: |
+        mkdir build && cd build
+        cmake .. -DBUILD_TESTING=ON
+        make
+    
+    - name: Run C++ tests
+      run: |
+        cd build
+        ./test_cpp
+
+  benchmark:
+    runs-on: ubuntu-latest
+    needs: [test-python, test-cpp]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[all]"
+    
+    - name: Run benchmarks
+      run: |
+        python example_benchmark.py
+    
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark-results
+        path: benchmark_results.json
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: [test-python, test-cpp]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build Docker image
+      run: |
+        docker build -t hybridvectordb:latest .
+    
+    - name: Test Docker image
+      run: |
+        docker run --rm hybridvectordb:latest python -c "import hybridvectordb; print('Docker image works')"
+    
+    - name: Push to Docker Hub (if on master)
+      if: github.ref == 'refs/heads/master'
+      run: |
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        docker tag hybridvectordb:latest ${{ secrets.DOCKER_USERNAME }}/hybridvectordb:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/hybridvectordb:latest
+
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install safety bandit
+    
+    - name: Check for security vulnerabilities
+      run: |
+        safety check
+        bandit -r hybridvectordb/
+
+  docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[all]"
+        pip install sphinx sphinx-rtd-theme
+    
+    - name: Build documentation
+      run: |
+        cd docs
+        make html
+    
+    - name: Upload documentation
+      uses: actions/upload-artifact@v3
+      with:
+        name: documentation
+        path: docs/_build/html/

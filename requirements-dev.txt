@@ -1,0 +1,31 @@
+# Development dependencies
+pytest>=7.0.0
+black>=22.0.0
+mypy>=1.0.0
+flake8>=5.0.0
+isort>=5.10.0
+pre-commit>=2.20.0
+coverage>=6.0.0
+pytest-cov>=4.0.0
+
+# C++ development
+cmake>=3.15.0
+gtest>=1.11.0
+
+# Documentation
+sphinx>=5.0.0
+sphinx-rtd-theme>=1.0.0
+
+# Benchmarking
+matplotlib>=3.5.0
+seaborn>=0.11.0
+jupyter>=1.0.0
+
+# Production dependencies
+gunicorn>=21.2.0
+flask>=2.3.2
+prometheus-client>=0.16.0
+psutil>=5.9.5
+uvicorn>=0.21.0
+fastapi>=0.95.0
+python-multipart>=0.0.6
