@@ -1,6 +1,7 @@
 // Mock data for HybridVectorDB Console
 
-export const systemHealth = {
+// Use stable values to prevent hydration mismatches
+const SYSTEM_HEALTH = {
   status: "healthy" as const,
   uptime: "14d 7h 23m",
   version: "0.5.0",
@@ -14,7 +15,7 @@ export const systemHealth = {
   gpuMemoryTotal: 16.0, // GB
 }
 
-export const performanceMetrics = [
+const PERFORMANCE_METRICS = [
   { time: "00:00", throughput: 1200, latency: 2.1, cpuOps: 800, gpuOps: 400 },
   { time: "01:00", throughput: 980, latency: 2.4, cpuOps: 620, gpuOps: 360 },
   { time: "02:00", throughput: 750, latency: 2.8, cpuOps: 500, gpuOps: 250 },
@@ -41,14 +42,14 @@ export const performanceMetrics = [
   { time: "23:00", throughput: 1100, latency: 2.3, cpuOps: 650, gpuOps: 450 },
 ]
 
-export const benchmarkResults = [
+const BENCHMARK_RESULTS = [
   { dataset: "1K", pythonTime: 0.5, cppTime: 0.2, speedup: 2.5 },
   { dataset: "10K", pythonTime: 2.1, cppTime: 0.6, speedup: 3.5 },
   { dataset: "100K", pythonTime: 18.5, cppTime: 4.8, speedup: 3.9 },
   { dataset: "1M", pythonTime: 32.0, cppTime: 7.2, speedup: 4.4 },
 ]
 
-export const routingDecisions = [
+const ROUTING_DECISIONS = [
   { time: "Last 1h", cpu: 342, gpu: 518, total: 860 },
   { time: "Last 6h", cpu: 2100, gpu: 3400, total: 5500 },
   { time: "Last 24h", cpu: 8400, gpu: 13200, total: 21600 },
@@ -65,7 +66,7 @@ export type VectorEntry = {
   lastAccessed: string
 }
 
-export const vectors: VectorEntry[] = [
+const VECTORS: VectorEntry[] = [
   {
     id: "vec_001a2b3c",
     dimensions: 768,
@@ -95,7 +96,7 @@ export const vectors: VectorEntry[] = [
   },
 ]
 
-export const recentAlerts = [
+const RECENT_ALERTS = [
   { id: 1, type: "warning" as const, message: "GPU memory usage exceeded 80% threshold", time: "12 min ago" },
   { id: 2, type: "info" as const, message: "Auto-scaling triggered: 3 -> 4 pods", time: "1h ago" },
   { id: 3, type: "success" as const, message: "Benchmark suite completed successfully", time: "2h ago" },
@@ -103,9 +104,20 @@ export const recentAlerts = [
   { id: 5, type: "info" as const, message: "New routing strategy deployed: hybrid_v2", time: "6h ago" },
 ]
 
-export const configOptions = {
+const CONFIG_OPTIONS = {
   indexTypes: ["flat", "ivf"] as const,
   distanceMetrics: ["l2", "cosine", "inner_product"] as const,
   routingStrategies: ["performance", "workload", "resource", "hybrid"] as const,
   dataDistributions: ["uniform", "normal", "clustered", "exponential"] as const,
+}
+
+// Export stable constants to prevent hydration mismatches
+export { 
+  SYSTEM_HEALTH as systemHealth,
+  PERFORMANCE_METRICS as performanceMetrics,
+  BENCHMARK_RESULTS as benchmarkResults,
+  ROUTING_DECISIONS as routingDecisions,
+  VECTORS as vectors,
+  RECENT_ALERTS as recentAlerts,
+  CONFIG_OPTIONS as configOptions,
 }
