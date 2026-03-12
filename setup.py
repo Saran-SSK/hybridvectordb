@@ -49,9 +49,13 @@ setup(
         "cpp": ["pybind11>=2.10.0", "cmake>=3.15.0"],
         "dev": ["pytest>=7.0.0", "black>=22.0.0", "mypy>=1.0.0", "gtest>=1.11.0"],
         "benchmark": ["matplotlib>=3.5.0", "seaborn>=0.11.0", "jupyter>=1.0.0"],
+        "production": ["gunicorn>=21.2.0", "flask>=2.3.2", "prometheus-client>=0.16.0", 
+                      "psutil>=5.9.5", "uvicorn>=0.21.0", "fastapi>=0.95.0"],
         "all": ["faiss-gpu>=1.7.4", "pybind11>=2.10.0", "cmake>=3.15.0", 
                 "pytest>=7.0.0", "black>=22.0.0", "mypy>=1.0.0", "gtest>=1.11.0",
-                "matplotlib>=3.5.0", "seaborn>=0.11.0", "jupyter>=1.0.0"]
+                "matplotlib>=3.5.0", "seaborn>=0.11.0", "jupyter>=1.0.0",
+                "gunicorn>=21.2.0", "flask>=2.3.2", "prometheus-client>=0.16.0", 
+                "psutil>=5.9.5", "uvicorn>=0.21.0", "fastapi>=0.95.0"]
     },
     ext_modules=ext_modules,
     cmdclass={"build_ext": build_ext},
