@@ -14,8 +14,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+# lib/ - Commented out to allow frontend/lib/
+# lib64/
 parts/
 sdist/
 var/
@@ -140,3 +140,25 @@ dmypy.json
 
 # Pyre
 .pyre/
+
+# Frontend specific exceptions (allow frontend files)
+!frontend/
+!frontend/**/
+!frontend/src/
+!frontend/src/**/
+!frontend/lib/
+!frontend/lib/**/
+
+# Node.js specific (for frontend)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/dist/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
