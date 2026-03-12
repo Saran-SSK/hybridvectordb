@@ -1,8 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "recharts"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Legend } from "recharts"
 import { performanceMetrics } from "@/lib/mock-data"
 
 export function LatencyChart() {
@@ -13,31 +12,23 @@ export function LatencyChart() {
         <CardDescription>Average response time in milliseconds</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer
-          config={{
-            latency: {
-              label: "Latency",
-              color: "hsl(var(--chart-2))",
-            },
-          }}
-          className="h-[200px]"
-        >
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={performanceMetrics}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="time" />
-              <YAxis />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Line
-                type="monotone"
-                dataKey="latency"
-                stroke="var(--color-latency)"
-                strokeWidth={2}
-                dot={false}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartContainer>
+        <ResponsiveContainer width="100%" height={200}>
+          <LineChart data={performanceMetrics}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="time" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line
+              type="monotone"
+              dataKey="latency"
+              stroke="#8884d8"
+              strokeWidth={2}
+              dot={false}
+              name="Latency (ms)"
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </CardContent>
     </Card>
   )
