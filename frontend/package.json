@@ -1,0 +1,17 @@
+{
+  "name": "hybridvectordb-frontend",
+  "version": "1.0.0",
+  "description": "HybridVectorDB Dashboard - Static HTML Frontend",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server . -p 3000 -c-1 --cors",
+    "dev": "npx http-server . -p 3000 -c-1 --cors -o",
+    "serve": "python -m http.server 3000"
+  },
+  "keywords": ["vector-database", "dashboard", "hybridvectordb"],
+  "author": "HybridVectorDB",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HybridVectorDB — Control Plane</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg0:#07080a; --bg1:#0d0f12; --bg2:#121418; --bg3:#181b21; --bg4:#1e222a; --bg5:#252a35;
+  --border:rgba(255,255,255,0.06); --border2:rgba(255,255,255,0.11); --border3:rgba(255,255,255,0.18);
+  --t0:#eef0f5; --t1:#b2b8c8; --t2:#6a7080; --t3:#3d4252;
+  --accent:#7c6af7; --accent2:#a89cfa; --accent3:rgba(124,106,247,0.15);
+  --green:#1fdb98; --red:#f56565; --amber:#f59e0b; --blue:#38bdf8; --pink:#f472b6; --teal:#2dd4bf;
+  --green-bg:rgba(31,219,152,0.1); --red-bg:rgba(245,101,101,0.1); --amber-bg:rgba(245,158,11,0.1);
+  --blue-bg:rgba(56,189,248,0.1); --pink-bg:rgba(244,114,182,0.1);
+  --mono:'JetBrains Mono',monospace; --sans:'Syne',sans-serif;
+  --sidebar:220px; --topbar:50px; --radius:10px; --radius-sm:6px;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg0);}
+body{font-family:var(--sans);color:var(--t0);font-size:13px;line-height:1.5;}
+#app{display:flex;height:100vh;overflow:hidden;}
+
+/* ── SIDEBAR ── */
+#sidebar{width:var(--sidebar);min-width:var(--sidebar);background:var(--bg1);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
+#sidebar::-webkit-scrollbar{width:3px;}#sidebar::-webkit-scrollbar-thumb{background:var(--bg5);}
+.logo-wrap{display:flex;align-items:center;gap:10px;padding:15px 14px 13px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;}
+.logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#c084fc);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;font-family:var(--mono);flex-shrink:0;letter-spacing:-0.5px;}
+.logo-name{font-size:13px;font-weight:700;color:var(--t0);letter-spacing:-0.3px;}
+.logo-ver{font-size:9px;color:var(--t2);font-family:var(--mono);margin-top:1px;}
+.nav-group{padding:12px 8px 4px;}
+.nav-group-label{font-size:9px;font-weight:600;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;padding:0 8px 5px;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:6.5px 9px;border-radius:var(--radius-sm);cursor:pointer;color:var(--t2);font-size:12px;font-weight:500;transition:all 0.12s;user-select:none;margin-bottom:1px;position:relative;}
+.nav-item:hover{background:var(--bg3);color:var(--t1);}
+.nav-item.active{background:var(--accent3);color:var(--accent2);}
+.nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:16px;background:var(--accent);border-radius:2px;}
+.nav-item svg{flex-shrink:0;width:14px;height:14px;opacity:0.8;}
+.nav-item.active svg{opacity:1;}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;}
+.nav-badge.red{background:var(--red-bg);color:var(--red);}
+.nav-badge.green{background:var(--green-bg);color:var(--green);}
+.nav-badge.blue{background:var(--blue-bg);color:var(--blue);}
+
+/* ── MAIN ── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+#topbar{height:var(--topbar);min-height:var(--topbar);background:var(--bg1);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;}
+.tb-page{font-size:14px;font-weight:700;color:var(--t0);}
+.tb-crumb{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2);}
+.tb-crumb span{color:var(--t3);}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 2px rgba(31,219,152,0.2);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+.live-label{font-family:var(--mono);font-size:10px;color:var(--green);}
+.tb-time{font-family:var(--mono);font-size:11px;color:var(--t2);}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:var(--radius-sm);font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);color:var(--t1);font-family:var(--sans);transition:all 0.12s;white-space:nowrap;}
+.btn:hover{background:var(--bg4);color:var(--t0);}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.btn.primary:hover{background:var(--accent2);border-color:var(--accent2);}
+.btn.danger{background:var(--red-bg);border-color:rgba(245,101,101,0.3);color:var(--red);}
+.btn.sm{padding:3px 9px;font-size:10px;}
+
+/* ── CONTENT ── */
+#content{flex:1;overflow-y:auto;padding:18px 22px;background:var(--bg0);}
+#content::-webkit-scrollbar{width:5px;}#content::-webkit-scrollbar-thumb{background:var(--bg4);}
+.page{display:none;animation:fadeUp 0.18s ease-out;}
+.page.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.pg-header{margin-bottom:18px;}
+.pg-title{font-size:17px;font-weight:700;color:var(--t0);margin-bottom:3px;}
+.pg-sub{font-size:11px;color:var(--t2);}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:15px;}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.card-title{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:0.07em;}
+.card-actions{display:flex;align-items:center;gap:6px;}
+.card-tag{font-family:var(--mono);font-size:10px;color:var(--t2);}
+
+/* ── METRIC CARDS ── */
+.mcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;position:relative;overflow:hidden;cursor:default;transition:border-color 0.15s;}
+.mcard:hover{border-color:var(--border2);}
+.mcard-accent{position:absolute;top:0;left:0;right:0;height:2px;}
+.mcard-lbl{font-size:10px;font-weight:600;color:var(--t2);margin-bottom:7px;display:flex;align-items:center;gap:5px;text-transform:uppercase;letter-spacing:0.06em;}
+.mcard-val{font-size:21px;font-weight:700;color:var(--t0);font-family:var(--mono);letter-spacing:-0.5px;line-height:1;}
+.mcard-unit{font-size:12px;color:var(--t2);font-weight:400;margin-left:2px;}
+.mcard-delta{font-size:10px;margin-top:5px;font-family:var(--mono);display:flex;align-items:center;gap:3px;}
+.mcard-delta.up{color:var(--green);} .mcard-delta.down{color:var(--red);} .mcard-delta.neutral{color:var(--t2);}
+.mcard-spark{height:24px;margin-top:8px;}
+
+/* ── GRIDS ── */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;}
+.g12{display:grid;grid-template-columns:1fr 2fr;gap:14px;margin-bottom:14px;}
+@media(max-width:960px){.g4{grid-template-columns:repeat(2,1fr)}.g2,.g21,.g12,.g3{grid-template-columns:1fr}}
+
+/* ── TABLES ── */
+.tbl{width:100%;border-collapse:collapse;font-size:11.5px;}
+.tbl th{text-align:left;padding:7px 10px;color:var(--t2);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border);}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--t1);vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--bg3);}
+.tbl .mono{font-family:var(--mono);font-size:11px;}
+.tbl .dim{color:var(--t2);}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.02em;}
+.badge.g{background:var(--green-bg);color:var(--green);}
+.badge.r{background:var(--red-bg);color:var(--red);}
+.badge.a{background:var(--amber-bg);color:var(--amber);}
+.badge.b{background:var(--blue-bg);color:var(--blue);}
+.badge.p{background:var(--accent3);color:var(--accent2);}
+.badge.t{background:rgba(45,212,191,0.1);color:var(--teal);}
+
+/* ── PROGRESS ── */
+.pbar{height:4px;border-radius:3px;background:var(--bg4);overflow:hidden;margin-top:5px;}
+.pfill{height:100%;border-radius:3px;transition:width 0.4s;}
+
+/* ── CHART WRAP ── */
+.ch{position:relative;width:100%;}
+
+/* ── TOGGLE ── */
+.toggle{position:relative;width:34px;height:18px;cursor:pointer;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-track{position:absolute;inset:0;background:var(--bg5);border-radius:9px;border:1px solid var(--border2);transition:0.2s;}
+.toggle input:checked+.toggle-track{background:var(--accent);border-color:var(--accent);}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:12px;height:12px;background:#fff;border-radius:50%;transition:0.2s;pointer-events:none;}
+.toggle input:checked~.toggle-thumb{left:19px;}
+
+/* ── FORM CONTROLS ── */
+.ctrl-input{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:6px 10px;color:var(--t0);font-family:var(--mono);font-size:11px;outline:none;transition:border-color 0.15s;}
+.ctrl-input:focus{border-color:var(--accent);}
+.ctrl-select{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:5px 9px;color:var(--t1);font-size:11px;font-family:var(--sans);cursor:pointer;outline:none;}
+.ctrl-select:focus{border-color:var(--accent);}
+
+/* ── CONFIG ROW ── */
+.cfg-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);}
+.cfg-row:last-child{border-bottom:none;}
+.cfg-lbl{font-size:12.5px;color:var(--t0);font-weight:500;}
+.cfg-desc{font-size:10px;color:var(--t2);margin-top:2px;}
+
+/* ── ALERTS ── */
+.al-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);transition:background 0.12s;}
+.al-row:last-child{border-bottom:none;}
+.al-row:hover{background:var(--bg3);margin:0 -15px;padding-left:15px;padding-right:15px;border-radius:var(--radius-sm);}
+.al-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.al-title{font-size:12px;font-weight:600;color:var(--t0);margin-bottom:2px;}
+.al-meta{font-size:10px;color:var(--t2);font-family:var(--mono);}
+.al-ack{margin-left:auto;flex-shrink:0;}
+
+/* ── NODE CARDS ── */
+.node-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.nc{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;}
+.nc-name{font-family:var(--mono);font-size:11px;color:var(--accent2);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.nc-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.nc-key{font-size:10px;color:var(--t2);}
+.nc-val{font-size:10px;font-family:var(--mono);color:var(--t1);}
+
+/* ── GPU GAUGES ── */
+.gpu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
+.gpu-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;}
+.gpu-name{font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}
+.gpu-gauge{position:relative;width:72px;height:72px;margin:0 auto 8px;}
+.gpu-gauge svg{transform:rotate(-90deg);}
+.gpu-pct{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:15px;font-weight:700;}
+.gpu-sub{font-size:11px;color:var(--t2);font-family:var(--mono);margin-top:2px;}
+
+/* ── SEARCH ── */
+.vec-textarea{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;color:var(--t0);font-family:var(--mono);font-size:11px;outline:none;resize:vertical;min-height:80px;transition:border-color 0.15s;}
+.vec-textarea:focus{border-color:var(--accent);}
+.result-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;margin-bottom:5px;transition:border-color 0.15s;}
+.result-row:hover{border-color:var(--border2);}
+.rk{font-family:var(--mono);font-size:10px;color:var(--t2);min-width:18px;}
+.rid{font-family:var(--mono);font-size:10px;color:var(--t2);min-width:80px;}
+.rsbar{flex:1;height:5px;background:var(--bg5);border-radius:3px;overflow:hidden;}
+.rsfill{height:100%;border-radius:3px;}
+.rsval{font-family:var(--mono);font-size:10px;color:var(--accent2);min-width:44px;text-align:right;}
+
+/* ── ROUTER DIAGRAM ── */
+.rd-wrap{display:flex;align-items:center;gap:0;padding:16px 0;}
+.rd-node{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-align:center;min-width:120px;}
+.rd-node.router{border-color:rgba(245,158,11,0.35);background:rgba(245,158,11,0.04);}
+.rd-node.gpu-n{border-color:rgba(124,106,247,0.35);background:rgba(124,106,247,0.04);}
+.rd-node.cpu-n{border-color:rgba(56,189,248,0.35);background:rgba(56,189,248,0.04);}
+.rd-node-title{font-size:12px;font-weight:700;margin-bottom:3px;}
+.rd-node-sub{font-size:10px;color:var(--t2);}
+.rd-arrow{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 10px;gap:8px;flex:1;}
+.rd-line{height:1px;background:var(--border2);position:relative;width:100%;}
+.rd-line::after{content:'▶';position:absolute;right:-5px;top:-7px;font-size:10px;color:var(--t2);}
+.rd-outputs{display:flex;flex-direction:column;gap:8px;}
+
+/* ── UPLOAD DROPZONE ── */
+.dropzone{border:2px dashed var(--border2);border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all 0.15s;}
+.dropzone:hover,.dropzone.over{border-color:var(--accent);background:var(--accent3);}
+
+/* ── HEATMAP ── */
+.heatmap-wrap{display:grid;gap:2px;}
+.hm-cell{border-radius:2px;cursor:pointer;transition:opacity 0.15s;}
+.hm-cell:hover{opacity:0.75;}
+
+/* ── TOAST ── */
+#toast-container{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+.toast{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;font-size:12px;color:var(--t0);min-width:260px;animation:toastIn 0.2s ease-out;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+.toast.success{border-color:rgba(31,219,152,0.4);}
+.toast.error{border-color:rgba(245,101,101,0.4);}
+.toast.warn{border-color:rgba(245,158,11,0.4);}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{to{opacity:0;transform:translateX(20px)}}
+
+/* ── MODAL ── */
+#modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:none;align-items:center;justify-content:center;}
+#modal-bg.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:20px;min-width:400px;max-width:560px;width:90%;}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:16px;}
+.modal-close{float:right;cursor:pointer;color:var(--t2);font-size:18px;line-height:1;}
+.modal-close:hover{color:var(--t0);}
+.form-row{margin-bottom:12px;}
+.form-label{font-size:11px;color:var(--t2);margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;}
+
+/* ── MISC ── */
+.divider{height:1px;background:var(--border);margin:12px 0;}
+.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;background:var(--bg4);color:var(--t2);margin-right:4px;}
+.section-gap{margin-bottom:14px;}
+.inline-chart-legend{display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t2);}
+.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<nav id="sidebar">
+  <div class="logo-wrap" onclick="nav('dashboard')">
+    <div class="logo-icon">HV</div>
+    <div>
+      <div class="logo-name">HybridVectorDB</div>
+      <div class="logo-ver">v2.4.1 · prod-cluster</div>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Overview</div>
+    <div class="nav-item active" data-p="dashboard" onclick="nav('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" data-p="performance" onclick="nav('performance')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Performance
+    </div>
+    <div class="nav-item" data-p="alerts" onclick="nav('alerts')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Alerts
+      <span class="nav-badge red" id="nb-alerts">3</span>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Data</div>
+    <div class="nav-item" data-p="vectors" onclick="nav('vectors')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/></svg>
+      Vectors
+      <span class="nav-badge blue">4.2M</span>
+    </div>
+    <div class="nav-item" data-p="search" onclick="nav('search')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Search
+    </div>
+    <div class="nav-item" data-p="indexes" onclick="nav('indexes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Indexes
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Infrastructure</div>
+    <div class="nav-item" data-p="router" onclick="nav('router')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/></svg>
+      Query Router
+    </div>
+    <div class="nav-item" data-p="gpu" onclick="nav('gpu')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M6 12h4m4 0h4M8 9v6M12 9v6M16 9v6"/></svg>
+      GPU Monitor
+    </div>
+    <div class="nav-item" data-p="cluster" onclick="nav('cluster')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="M12 8v4M7.83 17.17L12 12M16.17 17.17L12 12"/></svg>
+      Cluster
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Settings</div>
+    <div class="nav-item" data-p="config" onclick="nav('config')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 17.66l-1.41 1.41M19.07 19.07l-1.41-1.41M5.34 6.34L3.93 4.93M21 12h-2M5 12H3M12 21v-2M12 5V3"/></svg>
+      Configuration
+    </div>
+    <div class="nav-item" data-p="apikeys" onclick="nav('apikeys')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+      API Keys
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div id="main">
+  <div id="topbar">
+    <div>
+      <div class="tb-page" id="tb-title">Dashboard</div>
+      <div class="tb-crumb"><span>prod-cluster</span>›<span id="tb-sub">Overview</span></div>
+    </div>
+    <div class="tb-right">
+      <div class="live-dot"></div>
+      <span class="live-label">LIVE</span>
+      <span class="tb-time" id="tb-time"></span>
+      <button class="btn" onclick="handleRefresh()">↻ Refresh</button>
+      <button class="btn primary" id="tb-action" onclick="handleTopAction()">+ New Query</button>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="page active" id="pg-dashboard">
+      <div class="g4" id="metric-cards">
+        <div class="mcard" style="--c:var(--green)">
+          <div class="mcard-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div>
+          <div class="mcard-lbl">Throughput</div>
+          <div class="mcard-val"><span id="mv-throughput">142,380</span><span class="mcard-unit">ops/s</span></div>
+          <div class="mcard-delta up" id="md-throughput">↑ +8.4% vs 1h ago</div>
+          <canvas class="mcard-spark" id="spark-throughput"></canvas>
+        </div>
+        <div class="mcard">
+          <div class="mcard-accent" style="background:linear-gradient(90deg,var(--blue),transparent)"></div>
+          <div class="mcard-lbl">Avg Latency</div>
+          <div class="mcard-val"><span id="mv-latency">2.3</span><span class="mcard-unit">ms</span></div>
+          <div class="mcard-delta up" id="md-latency">↓ p99 improved 12%</div>
+          <canvas class="mcard-spark" id="spark-latency"></canvas>
+        </div>
+        <div class="mcard">
+          <div class="mcard-accent" style="background:linear-gradient(90deg,var(--accent2),transparent)"></div>
+          <div class="mcard-lbl">Vectors Stored</div>
+          <div class="mcard-val">4.23<span class="mcard-unit">M</span></div>
+          <div class="mcard-delta up">↑ +18K today</div>
+          <canvas class="mcard-spark" id="spark-vectors"></canvas>
+        </div>
+        <div class="mcard">
+          <div class="mcard-accent" style="background:linear-gradient(90deg,var(--amber),transparent)"></div>
+          <div class="mcard-lbl">GPU Utilization</div>
+          <div class="mcard-val"><span id="mv-gpu">78</span><span class="mcard-unit">%</span></div>
+          <div class="mcard-delta up">↑ 4 GPUs active</div>
+          <canvas class="mcard-spark" id="spark-gpu"></canvas>
+        </div>
+        <div class="mcard">
+          <div class="mcard-accent" style="background:linear-gradient(90deg,var(--teal),transparent)"></div>
+          <div class="mcard-lbl">CPU Utilization</div>
+          <div class="mcard-val"><span id="mv-cpu">34</span><span class="mcard-unit">%</span></div>
+          <div class="mcard-delta neutral">Avg across 12 cores</div>
+          <canvas class="mcard-spark" id="spark-cpu"></canvas>
+        </div>
+        <div class="mcard">
+          <div class="mcard-accent" style="background:linear-gradient(90deg,var(--blue),transparent)"></div>
+          <div class="mcard-lbl">Memory Usage</div>
+          <div class="mcard-val">18.4<span class="mcard-unit">GB</span></div>
+          <div class="mcard-delta neutral">72% of 24GB</div>
+          <div class="pbar" style="margin-top:6px"><div class="pfill" style="width:72%;background:var(--blue)"></div></div>
+        </div>
+        <div class="mcard">
+          <div class="mcard-accent" style="background:linear-gradient(90deg,var(--pink),transparent)"></div>
+          <div class="mcard-lbl">Active Queries</div>
+          <div class="mcard-val"><span id="mv-queries">247</span></div>
+          <div class="mcard-delta up">Queue depth: 12</div>
+          <canvas class="mcard-spark" id="spark-queries"></canvas>
+        </div>
+        <div class="mcard">
+          <div class="mcard-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div>
+          <div class="mcard-lbl">System Health</div>
+          <div class="mcard-val" style="color:var(--green)">99.8<span class="mcard-unit">%</span></div>
+          <div class="mcard-delta up">All nodes healthy</div>
+          <div class="pbar" style="margin-top:6px"><div class="pfill" style="width:99.8%;background:var(--green)"></div></div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">Query Latency — p50 / p95 / p99</span>
+            <div class="card-actions">
+              <div class="inline-chart-legend">
+                <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>p50</span>
+                <span class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span>p95</span>
+                <span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>p99</span>
+              </div>
+              <select class="ctrl-select" onchange="updateLatencyRange(this.value)">
+                <option value="30">30m</option><option value="60" selected>1h</option><option value="360">6h</option>
+              </select>
+            </div>
+          </div>
+          <div class="ch" style="height:175px"><canvas id="ch-latency"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">Throughput (ops/sec)</span>
+            <div class="card-actions">
+              <span class="badge g">Live</span>
+              <select class="ctrl-select" onchange="updateThroughputRange(this.value)">
+                <option value="30">30m</option><option value="60" selected>1h</option><option value="360">6h</option>
+              </select>
+            </div>
+          </div>
+          <div class="ch" style="height:175px"><canvas id="ch-throughput"></canvas></div>
+        </div>
+      </div>
+
+      <div class="g21">
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">CPU vs GPU Routing Ratio</span>
+            <div class="inline-chart-legend">
+              <span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>GPU</span>
+              <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>CPU</span>
+            </div>
+          </div>
+          <div class="ch" style="height:150px"><canvas id="ch-routing"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Index Distribution</span></div>
+          <div class="ch" style="height:130px"><canvas id="ch-index-dist"></canvas></div>
+          <div style="display:flex;flex-direction:column;gap:4px;margin-top:10px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t2)"><span>IVF256</span><span style="color:var(--t1)">51%</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t2)"><span>Flat</span><span style="color:var(--t1)">21.5%</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t2)"><span>IVF512</span><span style="color:var(--t1)">16%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="g3">
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Vector Growth</span></div>
+          <div class="ch" style="height:110px"><canvas id="ch-growth"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">GPU Memory Usage</span></div>
+          <div class="ch" style="height:110px"><canvas id="ch-gpu-mem-dash"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Top Queries</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:var(--mono);font-size:10px;color:var(--t2)">embeddings-prod</span>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--t1)">98,420/s</span>
+                <div class="pbar" style="width:80px;margin-top:0"><div class="pfill" style="width:69%;background:var(--accent)"></div></div>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:var(--mono);font-size:10px;color:var(--t2)">semantic-search</span>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--t1)">24,100/s</span>
+                <div class="pbar" style="width:80px;margin-top:0"><div class="pfill" style="width:17%;background:var(--teal)"></div></div>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:var(--mono);font-size:10px;color:var(--t2)">image-vectors</span>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--t1)">12,400/s</span>
+                <div class="pbar" style="width:80px;margin-top:0"><div class="pfill" style="width:9%;background:var(--blue)"></div></div>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:var(--mono);font-size:10px;color:var(--t2)">code-embeddings</span>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--t1)">7,460/s</span>
+                <div class="pbar" style="width:80px;margin-top:0"><div class="pfill" style="width:5%;background:var(--amber)"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Alerts on dashboard -->
+      <div class="card">
+        <div class="card-hd">
+          <span class="card-title">Recent System Events</span>
+          <button class="btn sm" onclick="nav('alerts')">View All →</button>
+        </div>
+        <div class="al-row">
+          <div class="al-icon" style="background:var(--red-bg)">⚠</div>
+          <div style="flex:1"><div class="al-title">GPU-2 memory pressure critical (90%)</div><div class="al-meta">CRITICAL · node-02 · gpu-2 · 4m ago</div></div>
+          <span class="badge r">CRIT</span>
+        </div>
+        <div class="al-row">
+          <div class="al-icon" style="background:var(--amber-bg)">⚡</div>
+          <div style="flex:1"><div class="al-title">p99 latency exceeded 10ms (12.4ms observed)</div><div class="al-meta">WARNING · shard-2 · 12m ago</div></div>
+          <span class="badge a">WARN</span>
+        </div>
+        <div class="al-row">
+          <div class="al-icon" style="background:var(--green-bg)">✓</div>
+          <div style="flex:1"><div class="al-title">Index rebuild completed — ivf-primary</div><div class="al-meta">INFO · 31m ago · 2.1M vectors in 4m 22s</div></div>
+          <span class="badge g">INFO</span>
+        </div>
+      </div>
+    </div><!-- /dashboard -->
+
+    <!-- ═══ VECTORS ═══ -->
+    <div class="page" id="pg-vectors">
+      <div class="pg-header"><div class="pg-title">Vector Management</div><div class="pg-sub">Manage collections, upload vectors, inspect metadata and statistics.</div></div>
+      <div class="g4" style="margin-bottom:16px">
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--accent2),transparent)"></div><div class="mcard-lbl">Total Vectors</div><div class="mcard-val">4.23<span class="mcard-unit">M</span></div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--blue),transparent)"></div><div class="mcard-lbl">Dimensions</div><div class="mcard-val">1536</div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div><div class="mcard-lbl">Collections</div><div class="mcard-val">6</div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--amber),transparent)"></div><div class="mcard-lbl">Index Size</div><div class="mcard-val">18.4<span class="mcard-unit">GB</span></div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">Collections</span>
+            <button class="btn primary sm" onclick="openModal('new-collection')">+ New Collection</button>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>Collection</th><th>Vectors</th><th>Dim</th><th>Index</th><th>Status</th><th></th></tr></thead>
+            <tbody id="collections-tbody">
+              <tr><td class="mono">embeddings-prod</td><td class="mono">2,144,832</td><td class="mono">1536</td><td><span class="badge p">IVF256</span></td><td><span class="badge g">Ready</span></td><td><button class="btn sm" onclick="showCollectionDetail('embeddings-prod')">Details</button></td></tr>
+              <tr><td class="mono">embeddings-stage</td><td class="mono">487,291</td><td class="mono">1536</td><td><span class="badge p">IVF128</span></td><td><span class="badge g">Ready</span></td><td><button class="btn sm" onclick="showCollectionDetail('embeddings-stage')">Details</button></td></tr>
+              <tr><td class="mono">semantic-search</td><td class="mono">900,444</td><td class="mono">768</td><td><span class="badge b">Flat</span></td><td><span class="badge g">Ready</span></td><td><button class="btn sm">Details</button></td></tr>
+              <tr><td class="mono">image-vectors</td><td class="mono">320,000</td><td class="mono">2048</td><td><span class="badge p">IVF512</span></td><td><span class="badge a">Rebuilding</span></td><td><button class="btn sm">Details</button></td></tr>
+              <tr><td class="mono">code-embeddings</td><td class="mono">180,100</td><td class="mono">384</td><td><span class="badge b">Flat</span></td><td><span class="badge g">Ready</span></td><td><button class="btn sm">Details</button></td></tr>
+              <tr><td class="mono">documents-raw</td><td class="mono">200,000</td><td class="mono">1024</td><td><span class="badge r">None</span></td><td><span class="badge a">Pending</span></td><td><button class="btn sm">Details</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:14px">
+            <div class="card-hd"><span class="card-title">Batch Upload</span></div>
+            <div class="dropzone" id="dropzone" onclick="simulateUpload()">
+              <div style="font-size:28px;margin-bottom:8px">⬆</div>
+              <div style="font-size:13px;color:var(--t1);margin-bottom:3px">Drop .npy, .parquet, .json files</div>
+              <div style="font-size:10px;color:var(--t2)">Max 500MB · up to 1M vectors per batch</div>
+            </div>
+            <div id="upload-section" style="display:none;margin-top:12px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t1);margin-bottom:4px">
+                <span id="upload-filename">embeddings-batch.npy</span>
+                <span id="upload-pct">0%</span>
+              </div>
+              <div class="pbar"><div class="pfill" id="upload-bar" style="width:0%;background:var(--accent)"></div></div>
+              <div style="font-size:10px;color:var(--t2);margin-top:5px;font-family:var(--mono)" id="upload-eta">Starting…</div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button class="btn sm" onclick="pauseUpload()">Pause</button>
+                <button class="btn sm danger" onclick="cancelUpload()">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><span class="card-title">Vector Dimension Distribution</span></div>
+            <div class="ch" style="height:140px"><canvas id="ch-vec-dims"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /vectors -->
+
+    <!-- ═══ SEARCH ═══ -->
+    <div class="page" id="pg-search">
+      <div class="pg-header"><div class="pg-title">Search Playground</div><div class="pg-sub">Execute vector similarity searches, inspect results, and benchmark latency.</div></div>
+      <div class="g21">
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">Query Vector</span>
+            <span class="card-tag" id="vec-dim-label">1536-dim</span>
+          </div>
+          <textarea class="vec-textarea" id="vec-input" rows="3">[-0.021, 0.183, -0.445, 0.721, 0.038, -0.294, 0.512, 0.167, -0.389, 0.824, 0.055, -0.741, 0.302, 0.518, -0.119, 0.633, -0.267, 0.455, 0.891, -0.044, 0.378, -0.612, 0.147, 0.763, -0.329...]</textarea>
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center">
+            <select class="ctrl-select" id="search-collection">
+              <option>embeddings-prod</option><option>semantic-search</option><option>image-vectors</option><option>code-embeddings</option>
+            </select>
+            <select class="ctrl-select" id="search-metric">
+              <option>Cosine</option><option>L2 (Euclidean)</option><option>Inner Product</option>
+            </select>
+            <select class="ctrl-select" id="search-k">
+              <option>Top-K: 10</option><option>Top-K: 20</option><option>Top-K: 50</option>
+            </select>
+            <button class="btn primary" onclick="runSearch()">▶ Search</button>
+            <button class="btn" onclick="randomVec()">⊞ Random Vector</button>
+          </div>
+          <div class="divider"></div>
+          <div class="card-hd">
+            <span class="card-title">Results</span>
+            <span class="card-tag" id="search-meta">—</span>
+          </div>
+          <div id="search-results" style="max-height:280px;overflow-y:auto">
+            <div style="color:var(--t2);font-size:11px;text-align:center;padding:20px">Click ▶ Search to run a query</div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:14px">
+            <div class="card-hd"><span class="card-title">Similarity Score Distribution</span></div>
+            <div class="ch" style="height:160px"><canvas id="ch-search-scores"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><span class="card-title">Query Metadata</span></div>
+            <div style="display:flex;flex-direction:column;gap:7px" id="search-stats">
+              <div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:var(--t2)">Execution</span><span class="badge g" id="ss-exec">—</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:var(--t2)">Index</span><span style="font-family:var(--mono);font-size:11px;color:var(--t1)" id="ss-index">—</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:var(--t2)">Candidates</span><span style="font-family:var(--mono);font-size:11px;color:var(--t1)" id="ss-candidates">—</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:var(--t2)">Latency</span><span style="font-family:var(--mono);font-size:11px;color:var(--green)" id="ss-latency">—</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:var(--t2)">Metric</span><span style="font-family:var(--mono);font-size:11px;color:var(--t1)" id="ss-metric">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Similarity heatmap -->
+      <div class="card">
+        <div class="card-hd">
+          <span class="card-title">Result Similarity Heatmap</span>
+          <span class="card-tag">Top results × query dimensions (sampled)</span>
+        </div>
+        <div id="heatmap-container" style="overflow-x:auto">
+          <div style="color:var(--t2);font-size:11px;text-align:center;padding:16px">Run a search to see the heatmap</div>
+        </div>
+      </div>
+    </div><!-- /search -->
+
+    <!-- ═══ INDEXES ═══ -->
+    <div class="page" id="pg-indexes">
+      <div class="pg-header"><div class="pg-title">Index Management</div><div class="pg-sub">FAISS Flat and IVF indexes — training status, memory footprint, and performance.</div></div>
+      <div class="card section-gap">
+        <div class="card-hd">
+          <span class="card-title">Active Indexes</span>
+          <button class="btn primary sm" onclick="openModal('build-index')">+ Build Index</button>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Name</th><th>Type</th><th>Vectors</th><th>Dimensions</th><th>Memory</th><th>nlist</th><th>nprobe</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">ivf-primary</td><td><span class="badge p">IVF256</span></td><td class="mono">2,144,832</td><td class="mono">1536</td><td class="mono">8.4 GB</td><td class="mono">256</td><td class="mono">32</td><td><span class="badge g">● Trained</span></td><td><button class="btn sm" onclick="rebuildIndex('ivf-primary')">Rebuild</button></td></tr>
+            <tr><td class="mono">ivf-staging</td><td><span class="badge p">IVF128</span></td><td class="mono">487,291</td><td class="mono">1536</td><td class="mono">1.9 GB</td><td class="mono">128</td><td class="mono">16</td><td><span class="badge g">● Trained</span></td><td><button class="btn sm" onclick="rebuildIndex('ivf-staging')">Rebuild</button></td></tr>
+            <tr><td class="mono">flat-semantic</td><td><span class="badge b">Flat</span></td><td class="mono">900,444</td><td class="mono">768</td><td class="mono">2.7 GB</td><td class="mono">—</td><td class="mono">—</td><td><span class="badge g">● Ready</span></td><td><button class="btn sm">Inspect</button></td></tr>
+            <tr><td class="mono">ivf-images</td><td><span class="badge p">IVF512</span></td><td class="mono">320,000</td><td class="mono">2048</td><td class="mono">5.2 GB</td><td class="mono">512</td><td class="mono">64</td><td><span class="badge a" id="idx-images-status">⟳ Rebuilding 62%</span></td><td><button class="btn sm danger" onclick="cancelRebuild()">Cancel</button></td></tr>
+          </tbody>
+        </table>
+        <!-- Rebuild progress -->
+        <div style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t1);margin-bottom:4px"><span style="font-family:var(--mono)">ivf-images rebuild</span><span id="rebuild-pct" style="font-family:var(--mono)">62%</span></div>
+          <div class="pbar"><div class="pfill" id="rebuild-bar" style="width:62%;background:var(--amber)"></div></div>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Index Memory Footprint</span></div>
+          <div class="ch" style="height:160px"><canvas id="ch-idx-mem"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Index Performance — QPS vs Recall</span></div>
+          <div class="ch" style="height:160px"><canvas id="ch-idx-perf"></canvas></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title">IVF Configuration</span></div>
+        <div class="g2" style="margin-bottom:0">
+          <div>
+            <div class="cfg-row"><div><div class="cfg-lbl">nlist (Voronoi cells)</div><div class="cfg-desc">Number of clusters for IVF partitioning</div></div><input class="ctrl-input" type="number" value="256" style="width:90px"></div>
+            <div class="cfg-row"><div><div class="cfg-lbl">nprobe (search probes)</div><div class="cfg-desc">Cells to scan per query — higher = better recall</div></div><input class="ctrl-input" type="number" value="32" style="width:90px"></div>
+            <div class="cfg-row"><div><div class="cfg-lbl">Training samples</div><div class="cfg-desc">Vectors used for k-means initialization</div></div><input class="ctrl-input" type="number" value="65536" style="width:90px"></div>
+          </div>
+          <div>
+            <div class="cfg-row"><div><div class="cfg-lbl">Quantizer type</div><div class="cfg-desc">Sub-quantizer for PQ compression</div></div>
+              <select class="ctrl-select"><option>Flat</option><option>SQ8</option><option>PQ64</option></select>
+            </div>
+            <div class="cfg-row"><div><div class="cfg-lbl">GPU offload</div><div class="cfg-desc">Offload index operations to GPU</div></div>
+              <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:8px">
+              <button class="btn primary" onclick="applyIndexConfig()">Apply & Rebuild</button>
+              <button class="btn">Reset Defaults</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /indexes -->
+
+    <!-- ═══ ROUTER ═══ -->
+    <div class="page" id="pg-router">
+      <div class="pg-header"><div class="pg-title">Query Router</div><div class="pg-sub">Adaptive CPU/GPU routing engine with real-time decision telemetry.</div></div>
+
+      <!-- Router flow diagram -->
+      <div class="card section-gap">
+        <div class="card-hd"><span class="card-title">Routing Decision Flow</span><span class="badge a">Adaptive Mode ON</span></div>
+        <div class="rd-wrap">
+          <!-- Input -->
+          <div class="rd-node" style="min-width:100px;flex-shrink:0">
+            <div style="font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px">Incoming</div>
+            <div style="font-family:var(--mono);font-size:20px;font-weight:700;color:var(--t0)" id="rd-incoming">142K</div>
+            <div style="font-size:9px;color:var(--t2)">queries/s</div>
+          </div>
+          <!-- Arrow -->
+          <div class="rd-arrow"><div class="rd-line"></div></div>
+          <!-- Cache check -->
+          <div class="rd-node" style="min-width:110px;flex-shrink:0;border-color:rgba(45,212,191,0.35);background:rgba(45,212,191,0.04)">
+            <div style="font-size:9px;color:var(--teal);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px">Cache</div>
+            <div style="font-size:12px;font-weight:700;color:var(--teal)">HIT 34%</div>
+            <div style="font-size:9px;color:var(--t2);margin-top:2px">48K/s cached</div>
+          </div>
+          <!-- Arrow -->
+          <div class="rd-arrow"><div class="rd-line"></div></div>
+          <!-- Router -->
+          <div class="rd-node router" style="min-width:150px;flex-shrink:0">
+            <div style="font-size:9px;color:var(--amber);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px">⚡ Adaptive Router</div>
+            <div style="font-size:11px;font-weight:600;color:var(--t1)">Batch·Complexity·Load</div>
+            <div style="font-size:9px;color:var(--t2);margin-top:3px">Threshold: batch≥64 → GPU</div>
+          </div>
+          <!-- Branching arrows -->
+          <div class="rd-arrow" style="flex-direction:column;justify-content:space-around">
+            <div style="display:flex;align-items:center;gap:6px">
+              <div style="height:1px;width:40px;background:var(--accent)"></div>
+              <span style="font-size:9px;color:var(--accent2)">78% →</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <div style="height:1px;width:40px;background:var(--blue)"></div>
+              <span style="font-size:9px;color:var(--blue)">22% →</span>
+            </div>
+          </div>
+          <!-- GPU / CPU outputs -->
+          <div class="rd-outputs" style="flex:1">
+            <div class="rd-node gpu-n">
+              <div style="font-size:11px;font-weight:700;color:var(--accent2)">GPU Execution</div>
+              <div class="rd-node-sub">CUDA · FAISS-GPU · A100×4</div>
+              <div style="font-family:var(--mono);font-size:13px;color:var(--accent2);margin-top:5px">110K/s <span style="font-size:9px;color:var(--t2)">1.8ms avg</span></div>
+            </div>
+            <div class="rd-node cpu-n">
+              <div style="font-size:11px;font-weight:700;color:var(--blue)">CPU Execution</div>
+              <div class="rd-node-sub">OpenBLAS · Small batches · Cache hits</div>
+              <div style="font-family:var(--mono);font-size:13px;color:var(--blue);margin-top:5px">32K/s <span style="font-size:9px;color:var(--t2)">4.2ms avg</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">Routing Ratio Over Time</span>
+            <div class="inline-chart-legend">
+              <span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>GPU</span>
+              <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>CPU</span>
+              <span class="legend-item"><span class="legend-dot" style="background:var(--teal)"></span>Cache</span>
+            </div>
+          </div>
+          <div class="ch" style="height:165px"><canvas id="ch-router-ratio"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Routing Latency Distribution</span></div>
+          <div class="ch" style="height:165px"><canvas id="ch-router-latency"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd"><span class="card-title">Router Configuration</span></div>
+        <div class="g2" style="margin-bottom:0">
+          <div>
+            <div class="cfg-row"><div><div class="cfg-lbl">GPU batch threshold</div><div class="cfg-desc">Min batch size to route to GPU</div></div><input class="ctrl-input" type="number" id="rt-batch" value="64" style="width:80px"></div>
+            <div class="cfg-row"><div><div class="cfg-lbl">GPU load ceiling %</div><div class="cfg-desc">Fallback to CPU above this utilization</div></div><input class="ctrl-input" type="number" id="rt-ceil" value="90" style="width:80px"></div>
+            <div class="cfg-row"><div><div class="cfg-lbl">Cache TTL (seconds)</div><div class="cfg-desc">Result cache time-to-live</div></div><input class="ctrl-input" type="number" id="rt-ttl" value="300" style="width:80px"></div>
+          </div>
+          <div>
+            <div class="cfg-row"><div><div class="cfg-lbl">Adaptive routing</div><div class="cfg-desc">ML-driven threshold auto-tuning</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+            <div class="cfg-row"><div><div class="cfg-lbl">Cache-first routing</div><div class="cfg-desc">Bypass index for cache hits</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+            <div class="cfg-row"><div><div class="cfg-lbl">GPU failover</div><div class="cfg-desc">Auto-failover to CPU on GPU error</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+          <button class="btn" onclick="simulateRouterUpdate()">Simulate</button>
+          <button class="btn primary" onclick="saveRouterConfig()">Save Config</button>
+        </div>
+      </div>
+    </div><!-- /router -->
+
+    <!-- ═══ PERFORMANCE ═══ -->
+    <div class="page" id="pg-performance">
+      <div class="pg-header"><div class="pg-title">Performance Monitoring</div><div class="pg-sub">Real-time latency, throughput, memory, and thread utilization.</div></div>
+      <div class="g4" style="margin-bottom:16px">
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div><div class="mcard-lbl">p50 Latency</div><div class="mcard-val">1.2<span class="mcard-unit">ms</span></div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--blue),transparent)"></div><div class="mcard-lbl">p95 Latency</div><div class="mcard-val">3.8<span class="mcard-unit">ms</span></div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--amber),transparent)"></div><div class="mcard-lbl">p99 Latency</div><div class="mcard-val" style="color:var(--amber)">12.4<span class="mcard-unit">ms</span></div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--red),transparent)"></div><div class="mcard-lbl">Error Rate</div><div class="mcard-val">0.02<span class="mcard-unit">%</span></div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">Latency — p50 / p95 / p99</span>
+            <select class="ctrl-select" onchange="updatePerfRange(this.value)"><option value="1h">1h</option><option value="6h">6h</option><option value="24h">24h</option></select>
+          </div>
+          <div class="ch" style="height:175px"><canvas id="ch-perf-lat"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Query Throughput</span><span class="badge g">Live</span></div>
+          <div class="ch" style="height:175px"><canvas id="ch-perf-qps"></canvas></div>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Latency Distribution Histogram</span><span class="card-tag">ms buckets</span></div>
+          <div class="ch" style="height:155px"><canvas id="ch-perf-hist"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Memory & Thread Utilization</span></div>
+          <div class="ch" style="height:155px"><canvas id="ch-perf-mem"></canvas></div>
+        </div>
+      </div>
+    </div><!-- /performance -->
+
+    <!-- ═══ GPU ═══ -->
+    <div class="page" id="pg-gpu">
+      <div class="pg-header"><div class="pg-title">GPU Monitor</div><div class="pg-sub">CUDA utilization, VRAM usage, temperature, and per-GPU query load.</div></div>
+      <div class="gpu-grid">
+        <div class="gpu-card">
+          <div class="gpu-name">GPU-0 · A100</div>
+          <div class="gpu-gauge">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle cx="36" cy="36" r="28" fill="none" stroke="#1e222a" stroke-width="8"/>
+              <circle cx="36" cy="36" r="28" fill="none" stroke="#7c6af7" stroke-width="8" stroke-dasharray="175.9" stroke-dashoffset="38.7" stroke-linecap="round"/>
+            </svg>
+            <div class="gpu-pct" style="color:var(--accent2)">78%</div>
+          </div>
+          <div class="gpu-sub">Compute · 78%</div>
+          <div class="gpu-sub" style="color:var(--amber)">67°C · 310W</div>
+          <div class="gpu-sub">47.2 / 80 GB VRAM</div>
+        </div>
+        <div class="gpu-card">
+          <div class="gpu-name">GPU-1 · A100</div>
+          <div class="gpu-gauge">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle cx="36" cy="36" r="28" fill="none" stroke="#1e222a" stroke-width="8"/>
+              <circle cx="36" cy="36" r="28" fill="none" stroke="#1fdb98" stroke-width="8" stroke-dasharray="175.9" stroke-dashoffset="79.2" stroke-linecap="round"/>
+            </svg>
+            <div class="gpu-pct" style="color:var(--green)">55%</div>
+          </div>
+          <div class="gpu-sub">Compute · 55%</div>
+          <div class="gpu-sub" style="color:var(--green)">58°C · 245W</div>
+          <div class="gpu-sub">38.4 / 80 GB VRAM</div>
+        </div>
+        <div class="gpu-card" style="border-color:rgba(245,101,101,0.25)">
+          <div class="gpu-name" style="color:var(--red)">GPU-2 · A100 ⚠</div>
+          <div class="gpu-gauge">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle cx="36" cy="36" r="28" fill="none" stroke="#1e222a" stroke-width="8"/>
+              <circle cx="36" cy="36" r="28" fill="none" stroke="#f56565" stroke-width="8" stroke-dasharray="175.9" stroke-dashoffset="17.6" stroke-linecap="round"/>
+            </svg>
+            <div class="gpu-pct" style="color:var(--red)">90%</div>
+          </div>
+          <div class="gpu-sub">Compute · 90%</div>
+          <div class="gpu-sub" style="color:var(--red)">81°C · 395W ⚠</div>
+          <div class="gpu-sub">71.8 / 80 GB VRAM</div>
+        </div>
+        <div class="gpu-card">
+          <div class="gpu-name">GPU-3 · A100</div>
+          <div class="gpu-gauge">
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <circle cx="36" cy="36" r="28" fill="none" stroke="#1e222a" stroke-width="8"/>
+              <circle cx="36" cy="36" r="28" fill="none" stroke="#38bdf8" stroke-width="8" stroke-dasharray="175.9" stroke-dashoffset="123.1" stroke-linecap="round"/>
+            </svg>
+            <div class="gpu-pct" style="color:var(--blue)">30%</div>
+          </div>
+          <div class="gpu-sub">Compute · 30%</div>
+          <div class="gpu-sub" style="color:var(--green)">44°C · 148W</div>
+          <div class="gpu-sub">22.1 / 80 GB VRAM</div>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">VRAM Usage Over Time</span>
+            <div class="inline-chart-legend">
+              <span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>GPU-0</span>
+              <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>GPU-1</span>
+              <span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>GPU-2</span>
+              <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>GPU-3</span>
+            </div>
+          </div>
+          <div class="ch" style="height:170px"><canvas id="ch-gpu-vram"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">Compute Utilization</span>
+            <button class="btn sm" onclick="refreshGPU()">↻ Refresh</button>
+          </div>
+          <div class="ch" style="height:170px"><canvas id="ch-gpu-compute"></canvas></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title">Per-GPU Statistics</span></div>
+        <table class="tbl">
+          <thead><tr><th>GPU</th><th>Model</th><th>VRAM Total</th><th>VRAM Used</th><th>Compute</th><th>Temperature</th><th>Power</th><th>Queries/s</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">GPU-0</td><td>A100 SXM4 80GB</td><td class="mono">80 GB</td><td class="mono">47.2 GB</td><td><span class="badge a">78%</span></td><td class="mono" style="color:var(--amber)">67°C</td><td class="mono">310W</td><td class="mono">52,400</td><td><span class="badge g">OK</span></td></tr>
+            <tr><td class="mono">GPU-1</td><td>A100 SXM4 80GB</td><td class="mono">80 GB</td><td class="mono">38.4 GB</td><td><span class="badge g">55%</span></td><td class="mono" style="color:var(--green)">58°C</td><td class="mono">245W</td><td class="mono">36,100</td><td><span class="badge g">OK</span></td></tr>
+            <tr><td class="mono">GPU-2</td><td>A100 SXM4 80GB</td><td class="mono">80 GB</td><td class="mono">71.8 GB</td><td><span class="badge r">90%</span></td><td class="mono" style="color:var(--red)">81°C</td><td class="mono">395W</td><td class="mono">47,200</td><td><span class="badge r">HOT</span></td></tr>
+            <tr><td class="mono">GPU-3</td><td>A100 SXM4 80GB</td><td class="mono">80 GB</td><td class="mono">22.1 GB</td><td><span class="badge b">30%</span></td><td class="mono" style="color:var(--green)">44°C</td><td class="mono">148W</td><td class="mono">16,600</td><td><span class="badge g">OK</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div><!-- /gpu -->
+
+    <!-- ═══ CLUSTER ═══ -->
+    <div class="page" id="pg-cluster">
+      <div class="pg-header"><div class="pg-title">Cluster</div><div class="pg-sub">Kubernetes node health, pod status, and resource distribution across the cluster.</div></div>
+      <div class="g4" style="margin-bottom:16px">
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div><div class="mcard-lbl">Nodes</div><div class="mcard-val">4<span class="mcard-unit" style="color:var(--green)">/4 up</span></div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--blue),transparent)"></div><div class="mcard-lbl">Pods Running</div><div class="mcard-val">48<span class="mcard-unit">/52</span></div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--amber),transparent)"></div><div class="mcard-lbl">CPU Requested</div><div class="mcard-val">168<span class="mcard-unit">/240</span></div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--accent2),transparent)"></div><div class="mcard-lbl">Memory Req.</div><div class="mcard-val">384<span class="mcard-unit">GB</span></div></div>
+      </div>
+      <div class="node-grid">
+        <div class="nc">
+          <div class="nc-name">node-01 <span class="badge g">Healthy</span></div>
+          <div class="nc-row"><span class="nc-key">CPU</span><span class="nc-val">42%</span></div>
+          <div class="pbar"><div class="pfill" style="width:42%;background:var(--blue)"></div></div>
+          <div class="nc-row" style="margin-top:5px"><span class="nc-key">Memory</span><span class="nc-val">68%</span></div>
+          <div class="pbar"><div class="pfill" style="width:68%;background:var(--accent)"></div></div>
+          <div class="nc-row" style="margin-top:5px"><span class="nc-key">GPU avg</span><span class="nc-val">66%</span></div>
+          <div class="pbar"><div class="pfill" style="width:66%;background:var(--accent2)"></div></div>
+          <div style="font-size:9px;color:var(--t2);margin-top:7px">12 pods · 4× A100 · k8s 1.29</div>
+        </div>
+        <div class="nc">
+          <div class="nc-name">node-02 <span class="badge g">Healthy</span></div>
+          <div class="nc-row"><span class="nc-key">CPU</span><span class="nc-val">28%</span></div>
+          <div class="pbar"><div class="pfill" style="width:28%;background:var(--blue)"></div></div>
+          <div class="nc-row" style="margin-top:5px"><span class="nc-key">Memory</span><span class="nc-val">54%</span></div>
+          <div class="pbar"><div class="pfill" style="width:54%;background:var(--accent)"></div></div>
+          <div class="nc-row" style="margin-top:5px"><span class="nc-key">GPU avg</span><span class="nc-val">60%</span></div>
+          <div class="pbar"><div class="pfill" style="width:60%;background:var(--accent2)"></div></div>
+          <div style="font-size:9px;color:var(--t2);margin-top:7px">14 pods · 4× A100 · k8s 1.29</div>
+        </div>
+        <div class="nc" style="border-color:rgba(245,158,11,0.3)">
+          <div class="nc-name">node-03 <span class="badge a">Degraded</span></div>
+          <div class="nc-row"><span class="nc-key">CPU</span><span class="nc-val" style="color:var(--amber)">67%</span></div>
+          <div class="pbar"><div class="pfill" style="width:67%;background:var(--amber)"></div></div>
+          <div class="nc-row" style="margin-top:5px"><span class="nc-key">Memory</span><span class="nc-val" style="color:var(--red)">89%</span></div>
+          <div class="pbar"><div class="pfill" style="width:89%;background:var(--red)"></div></div>
+          <div class="nc-row" style="margin-top:5px"><span class="nc-key">GPU avg</span><span class="nc-val">34%</span></div>
+          <div class="pbar"><div class="pfill" style="width:34%;background:var(--amber)"></div></div>
+          <div style="font-size:9px;color:var(--amber);margin-top:7px">⚠ Memory pressure · 11 pods</div>
+        </div>
+        <div class="nc">
+          <div class="nc-name">node-04 <span class="badge g">Healthy</span></div>
+          <div class="nc-row"><span class="nc-key">CPU</span><span class="nc-val">19%</span></div>
+          <div class="pbar"><div class="pfill" style="width:19%;background:var(--blue)"></div></div>
+          <div class="nc-row" style="margin-top:5px"><span class="nc-key">Memory</span><span class="nc-val">41%</span></div>
+          <div class="pbar"><div class="pfill" style="width:41%;background:var(--accent)"></div></div>
+          <div class="nc-row" style="margin-top:5px"><span class="nc-key">GPU avg</span><span class="nc-val">22%</span></div>
+          <div class="pbar"><div class="pfill" style="width:22%;background:var(--accent2)"></div></div>
+          <div style="font-size:9px;color:var(--t2);margin-top:7px">11 pods · 4× A100 · k8s 1.29</div>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Network Traffic (MB/s)</span></div>
+          <div class="ch" style="height:150px"><canvas id="ch-net"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Pod Status</span></div>
+          <table class="tbl">
+            <thead><tr><th>Pod</th><th>Node</th><th>Status</th><th>CPU</th><th>Mem</th><th>Restarts</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">shard-0-0</td><td class="mono dim">node-01</td><td><span class="badge g">Running</span></td><td class="mono">420m</td><td class="mono">8.2G</td><td class="mono">0</td></tr>
+              <tr><td class="mono">shard-0-1</td><td class="mono dim">node-01</td><td><span class="badge g">Running</span></td><td class="mono">380m</td><td class="mono">7.8G</td><td class="mono">0</td></tr>
+              <tr><td class="mono">router-7f9d</td><td class="mono dim">node-02</td><td><span class="badge g">Running</span></td><td class="mono">120m</td><td class="mono">512M</td><td class="mono">0</td></tr>
+              <tr><td class="mono">shard-1-0</td><td class="mono dim">node-03</td><td><span class="badge r">OOMKill</span></td><td class="mono">890m</td><td class="mono">15.9G</td><td class="mono">3</td></tr>
+              <tr><td class="mono">indexer-a82c</td><td class="mono dim">node-02</td><td><span class="badge g">Running</span></td><td class="mono">2100m</td><td class="mono">18.4G</td><td class="mono">0</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /cluster -->
+
+    <!-- ═══ ALERTS ═══ -->
+    <div class="page" id="pg-alerts">
+      <div class="pg-header"><div class="pg-title">Alerts</div><div class="pg-sub">System-wide alert feed — GPU, latency, memory, and index events.</div></div>
+      <div class="g4" style="margin-bottom:16px">
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--red),transparent)"></div><div class="mcard-lbl">Critical</div><div class="mcard-val" style="color:var(--red)" id="alert-crit-count">1</div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--amber),transparent)"></div><div class="mcard-lbl">Warning</div><div class="mcard-val" style="color:var(--amber)" id="alert-warn-count">2</div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--blue),transparent)"></div><div class="mcard-lbl">Info</div><div class="mcard-val">8</div></div>
+        <div class="mcard"><div class="mcard-accent" style="background:linear-gradient(90deg,var(--green),transparent)"></div><div class="mcard-lbl">Resolved (24h)</div><div class="mcard-val">14</div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Alert Volume (24h)</span></div>
+          <div class="ch" style="height:140px"><canvas id="ch-alert-vol"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Alert Type Distribution</span></div>
+          <div class="ch" style="height:140px"><canvas id="ch-alert-types"></canvas></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <span class="card-title">Active Alerts</span>
+          <div class="card-actions">
+            <select class="ctrl-select" id="alert-filter" onchange="filterAlerts(this.value)">
+              <option value="all">All Severity</option>
+              <option value="critical">Critical</option>
+              <option value="warning">Warning</option>
+              <option value="info">Info</option>
+            </select>
+            <button class="btn sm" onclick="ackAllAlerts()">Ack All</button>
+          </div>
+        </div>
+        <div id="alerts-list">
+          <div class="al-row" data-sev="critical">
+            <div class="al-icon" style="background:var(--red-bg)">⚠</div>
+            <div style="flex:1"><div class="al-title">GPU-2 memory utilization critical (90%)</div><div class="al-meta">CRITICAL · node-02 · gpu-2 · 4m ago · Auto-scaling triggered</div></div>
+            <button class="btn sm" onclick="ackAlert(this)">Ack</button>
+          </div>
+          <div class="al-row" data-sev="warning">
+            <div class="al-icon" style="background:var(--amber-bg)">⚡</div>
+            <div style="flex:1"><div class="al-title">p99 latency exceeded 10ms threshold (12.4ms)</div><div class="al-meta">WARNING · shard-2 · 12m ago</div></div>
+            <button class="btn sm" onclick="ackAlert(this)">Ack</button>
+          </div>
+          <div class="al-row" data-sev="warning">
+            <div class="al-icon" style="background:var(--amber-bg)">⚡</div>
+            <div style="flex:1"><div class="al-title">node-03 memory pressure (89% of 512GB)</div><div class="al-meta">WARNING · node-03 · 18m ago · Pod shard-1-0 OOMKilled</div></div>
+            <button class="btn sm" onclick="ackAlert(this)">Ack</button>
+          </div>
+          <div class="al-row" data-sev="info" style="opacity:0.6">
+            <div class="al-icon" style="background:var(--green-bg)">✓</div>
+            <div style="flex:1"><div class="al-title">Index rebuild completed: ivf-primary</div><div class="al-meta">INFO · 31m ago · 2.1M vectors reindexed in 4m 22s</div></div>
+            <span class="badge g">Resolved</span>
+          </div>
+          <div class="al-row" data-sev="info" style="opacity:0.6">
+            <div class="al-icon" style="background:var(--blue-bg)">ℹ</div>
+            <div style="flex:1"><div class="al-title">Autoscaling: node-04 joined cluster</div><div class="al-meta">INFO · 2h ago · Kubernetes HPA scale-out</div></div>
+            <span class="badge g">Resolved</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- /alerts -->
+
+    <!-- ═══ CONFIG ═══ -->
+    <div class="page" id="pg-config">
+      <div class="pg-header"><div class="pg-title">Configuration</div><div class="pg-sub">Dynamic system settings — most changes apply without restart.</div></div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Query Routing</span></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">GPU batch threshold</div><div class="cfg-desc">Minimum batch size to route to GPU</div></div><input class="ctrl-input" type="number" value="64" style="width:90px"></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">GPU load ceiling %</div><div class="cfg-desc">Route to CPU above this GPU utilization</div></div><input class="ctrl-input" type="number" value="90" style="width:90px"></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">Adaptive routing</div><div class="cfg-desc">ML-driven threshold auto-tuning</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">Cache-first routing</div><div class="cfg-desc">Bypass index for cache hits</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">GPU failover to CPU</div><div class="cfg-desc">Automatic fallback on GPU error</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Cache Settings</span></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">Query cache size</div><div class="cfg-desc">Max cached result entries</div></div><input class="ctrl-input" type="number" value="10000" style="width:90px"></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">Cache TTL (sec)</div><div class="cfg-desc">Time-to-live per cached result</div></div><input class="ctrl-input" type="number" value="300" style="width:90px"></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">Result caching</div><div class="cfg-desc">Cache similarity search results</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">Metadata caching</div><div class="cfg-desc">Cache vector metadata lookups</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">GPU Memory Allocation</span></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">VRAM limit per GPU (GB)</div><div class="cfg-desc">Hard cap on VRAM usage per device</div></div><input class="ctrl-input" type="number" value="70" style="width:90px"></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">OS reservation %</div><div class="cfg-desc">Memory reserved for system processes</div></div><input class="ctrl-input" type="number" value="10" style="width:90px"></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">Unified memory</div><div class="cfg-desc">Allow GPU to use system RAM overflow</div></div><label class="toggle"><input type="checkbox"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Rate Limits</span></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">Max queries/sec</div><div class="cfg-desc">Global QPS limit across all API keys</div></div><input class="ctrl-input" type="number" value="5000" style="width:90px"></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">Per-key QPS limit</div><div class="cfg-desc">Per API key rate limit</div></div><input class="ctrl-input" type="number" value="1000" style="width:90px"></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">Burst multiplier</div><div class="cfg-desc">Temporary burst allowance (×limit)</div></div><input class="ctrl-input" type="number" value="2" style="width:90px"></div>
+          <div class="cfg-row"><div><div class="cfg-lbl">Rate limiting</div><div class="cfg-desc">Enable global request rate limiting</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:2px">
+        <button class="btn" onclick="toast('Configuration reset to defaults','warn')">Reset to Defaults</button>
+        <button class="btn primary" onclick="saveConfig()">Save Configuration</button>
+      </div>
+    </div><!-- /config -->
+
+    <!-- ═══ API KEYS ═══ -->
+    <div class="page" id="pg-apikeys">
+      <div class="pg-header"><div class="pg-title">API Keys</div><div class="pg-sub">Manage authentication keys and monitor usage per key.</div></div>
+      <div class="card section-gap">
+        <div class="card-hd">
+          <span class="card-title">Active Keys</span>
+          <button class="btn primary sm" onclick="openModal('new-key')">+ Create Key</button>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Name</th><th>Key Prefix</th><th>Permissions</th><th>QPS Limit</th><th>Requests (24h)</th><th>Last Used</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Production API</td><td class="mono">hvdb_pk_a8f3c2...</td><td><span class="tag">read</span><span class="tag">write</span><span class="tag">admin</span></td><td class="mono">5000</td><td class="mono">12,483,291</td><td class="mono">just now</td><td><span class="badge g">Active</span></td><td><button class="btn sm danger" onclick="revokeKey('Production API')">Revoke</button></td></tr>
+            <tr><td>Analytics Service</td><td class="mono">hvdb_pk_7d9e41...</td><td><span class="tag">read</span></td><td class="mono">1000</td><td class="mono">4,291,048</td><td class="mono">2m ago</td><td><span class="badge g">Active</span></td><td><button class="btn sm danger" onclick="revokeKey('Analytics Service')">Revoke</button></td></tr>
+            <tr><td>Dev / Staging</td><td class="mono">hvdb_pk_c1b5a8...</td><td><span class="tag">read</span><span class="tag">write</span></td><td class="mono">500</td><td class="mono">83,120</td><td class="mono">1h ago</td><td><span class="badge g">Active</span></td><td><button class="btn sm danger">Revoke</button></td></tr>
+            <tr><td>CI Test Runner</td><td class="mono">hvdb_pk_29f7d3...</td><td><span class="tag">read</span></td><td class="mono">100</td><td class="mono">2,400</td><td class="mono">6h ago</td><td><span class="badge a">Expiring</span></td><td><button class="btn sm">Renew</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title">Request Volume per Key (24h)</span></div>
+        <div class="ch" style="height:160px"><canvas id="ch-api-usage"></canvas></div>
+      </div>
+    </div><!-- /apikeys -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ═══ MODAL ═══ -->
+<div id="modal-bg" onclick="closeModalBg(event)">
+  <div class="modal" id="modal-inner">
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- ═══ TOAST CONTAINER ═══ -->
+<div id="toast-container"></div>
+
+<script>
+// ─── STATE ───
+const CHARTS = {};
+let liveInterval = null;
+let uploadInterval = null;
+let uploadPaused = false;
+let uploadPct = 0;
+let rebuildInterval = null;
+let rebuildPct = 62;
+let activeAlerts = 3;
+
+// ─── UTILS ───
+const R = (a,b) => a + Math.random()*(b-a);
+const RI = (a,b) => Math.round(R(a,b));
+const RA = (n,a,b) => Array.from({length:n},()=>Math.round(R(a,b)*100)/100);
+const RAI = (n,a,b) => Array.from({length:n},()=>RI(a,b));
+
+function timeLabels(n, stepMin=5) {
+  return Array.from({length:n},(_,i)=>{
+    const d = new Date(); d.setMinutes(d.getMinutes()-(n-1-i)*stepMin);
+    return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+  });
+}
+
+function fmtNum(n) { return n >= 1e6 ? (n/1e6).toFixed(2)+'M' : n >= 1e3 ? Math.round(n/100)/10+'K' : n; }
+
+// ─── CLOCK ───
+function updateClock() {
+  const now = new Date();
+  document.getElementById('tb-time').textContent =
+    now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})+' UTC';
+}
+setInterval(updateClock, 1000); updateClock();
+
+// ─── NAVIGATION ───
+const PAGE_META = {
+  dashboard:   {title:'Dashboard',sub:'Overview',action:'+ Add Vectors'},
+  vectors:     {title:'Vectors',sub:'Collections',action:'+ Add Vectors'},
+  search:      {title:'Search',sub:'Playground',action:'▶ Run Search'},
+  indexes:     {title:'Indexes',sub:'FAISS Index Manager',action:'+ Build Index'},
+  router:      {title:'Query Router',sub:'Routing Engine',action:'Save Config'},
+  performance: {title:'Performance',sub:'Monitoring',action:'Export CSV'},
+  gpu:         {title:'GPU Monitor',sub:'CUDA Telemetry',action:'↻ Refresh'},
+  cluster:     {title:'Cluster',sub:'Kubernetes',action:'Scale Nodes'},
+  alerts:      {title:'Alerts',sub:'System Events',action:'+ Create Rule'},
+  config:      {title:'Configuration',sub:'System Settings',action:'Save Config'},
+  apikeys:     {title:'API Keys',sub:'Authentication',action:'+ Create Key'},
+};
+
+const PAGE_INITS = {};
+
+function nav(page) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pg = document.getElementById('pg-'+page);
+  if(pg) pg.classList.add('active');
+  const ni = document.querySelector(`[data-p="${page}"]`);
+  if(ni) ni.classList.add('active');
+  const m = PAGE_META[page]||{};
+  document.getElementById('tb-title').textContent = m.title||page;
+  document.getElementById('tb-sub').textContent = m.sub||'';
+  document.getElementById('tb-action').textContent = m.action||'Action';
+  if(!PAGE_INITS[page]) { PAGE_INITS[page]=true; initPageCharts(page); }
+}
+
+function handleTopAction() {
+  const pg = document.querySelector('.nav-item.active')?.dataset.p;
+  if(pg==='search') runSearch();
+  else if(pg==='config'||pg==='router') saveConfig();
+  else if(pg==='gpu') refreshGPU();
+  else toast('Action triggered successfully','success');
+}
+
+function handleRefresh() {
+  const pg = document.querySelector('.nav-item.active')?.dataset.p;
+  refreshLiveData();
+  toast('Data refreshed','success');
+  if(pg==='gpu') refreshGPU();
+}
+
+// ─── CHART DEFAULTS ───
+const CD = {
+  animation: false, responsive: true, maintainAspectRatio: false,
+  plugins: { legend: { display: false }, tooltip: {
+    backgroundColor:'#1e222a', borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
+    titleColor:'#b2b8c8', bodyColor:'#eef0f5', padding:10, cornerRadius:6,
+  }},
+};
+
+function mk(id, type, data, options={}) {
+  const ctx = document.getElementById(id);
+  if(!ctx) return null;
+  if(CHARTS[id]) { CHARTS[id].destroy(); }
+  CHARTS[id] = new Chart(ctx, { type, data, options: { ...CD, ...options } });
+  return CHARTS[id];
+}
+
+function gridOpts(yCallback) {
+  return {
+    scales: {
+      x: { grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#6a7080',font:{size:10},maxTicksLimit:8} },
+      y: { grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#6a7080',font:{size:10},callback:yCallback||undefined}, beginAtZero:false }
+    }
+  };
+}
+
+// ─── SPARKLINES ───
+function initSparkline(id, data, color) {
+  const ctx = document.getElementById(id);
+  if(!ctx) return;
+  if(CHARTS[id]) CHARTS[id].destroy();
+  CHARTS[id] = new Chart(ctx, {
+    type:'line',
+    data:{labels:data.map((_,i)=>i),datasets:[{data,borderColor:color,borderWidth:1.5,fill:true,backgroundColor:color+'22',tension:0.4,pointRadius:0}]},
+    options:{animation:false,responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}
+  });
+}
+
+// ─── DASHBOARD CHARTS ───
+function initDashboard() {
+  const L = timeLabels(24,5);
+  // Sparklines
+  initSparkline('spark-throughput', RAI(20,135000,148000), '#1fdb98');
+  initSparkline('spark-latency',    RA(20,1.8,3.2),        '#38bdf8');
+  initSparkline('spark-vectors',    RAI(20,4200000,4230000),'#a89cfa');
+  initSparkline('spark-gpu',        RAI(20,70,84),          '#f59e0b');
+  initSparkline('spark-cpu',        RAI(20,28,42),          '#2dd4bf');
+  initSparkline('spark-queries',    RAI(20,210,280),        '#f472b6');
+
+  // Latency
+  mk('ch-latency','line',{
+    labels:L,
+    datasets:[
+      {label:'p50',data:RA(24,0.8,1.8),borderColor:'#1fdb98',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+      {label:'p95',data:RA(24,2.5,5.5),borderColor:'#f59e0b',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+      {label:'p99',data:RA(24,8,18),   borderColor:'#f56565',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+    ]
+  }, gridOpts(v=>v.toFixed(1)+'ms'));
+
+  // Throughput
+  mk('ch-throughput','line',{
+    labels:L,
+    datasets:[{label:'OPS',data:RAI(24,132000,155000),borderColor:'#7c6af7',borderWidth:1.5,fill:true,backgroundColor:'rgba(124,106,247,0.12)',tension:0.4,pointRadius:0}]
+  }, gridOpts(v=>Math.round(v/1000)+'K'));
+
+  // Routing
+  mk('ch-routing','bar',{
+    labels:timeLabels(12,10),
+    datasets:[
+      {label:'GPU',data:RAI(12,70,82),backgroundColor:'rgba(124,106,247,0.75)',borderRadius:3,borderSkipped:false},
+      {label:'CPU',data:RAI(12,12,22),backgroundColor:'rgba(56,189,248,0.6)',borderRadius:3,borderSkipped:false},
+    ]
+  }, { scales:{
+    x:{stacked:true,grid:{display:false},ticks:{color:'#6a7080',font:{size:10}}},
+    y:{stacked:true,grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10},callback:v=>v+'%'},max:100}
+  }});
+
+  // Index dist donut
+  mk('ch-index-dist','doughnut',{
+    labels:['IVF256','IVF128','Flat','IVF512','None'],
+    datasets:[{data:[51,11.5,21.5,16,1],backgroundColor:['#7c6af7','#a89cfa','#1fdb98','#f59e0b','#6a7080'],borderWidth:0,hoverBorderWidth:2,hoverBorderColor:'#fff'}]
+  },{plugins:{...CD.plugins,tooltip:{...CD.plugins.tooltip,callbacks:{label:c=>`${c.label}: ${c.parsed}%`}}},cutout:'62%'});
+
+  // Growth
+  mk('ch-growth','line',{
+    labels:['Jan','Feb','Mar','Apr','May','Jun'],
+    datasets:[{data:[1200000,1800000,2400000,3000000,3700000,4230000],borderColor:'#a89cfa',borderWidth:1.5,fill:true,backgroundColor:'rgba(168,156,250,0.1)',tension:0.4,pointRadius:3,pointBackgroundColor:'#a89cfa'}]
+  }, gridOpts(v=>v>=1e6?+(v/1e6).toFixed(1)+'M':Math.round(v/1000)+'K'));
+
+  // GPU mem on dashboard
+  mk('ch-gpu-mem-dash','line',{
+    labels:timeLabels(16,3),
+    datasets:[
+      {label:'GPU-0',data:RA(16,44,50),borderColor:'#7c6af7',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+      {label:'GPU-1',data:RA(16,35,42),borderColor:'#1fdb98',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+      {label:'GPU-2',data:RA(16,68,75),borderColor:'#f56565',borderWidth:2,fill:false,tension:0.4,pointRadius:0},
+      {label:'GPU-3',data:RA(16,20,26),borderColor:'#38bdf8',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+    ]
+  }, gridOpts(v=>v+'GB'));
+}
+
+// ─── PAGE CHART INIT ───
+function initPageCharts(page) {
+  if(page==='dashboard') { initDashboard(); return; }
+  const L16 = timeLabels(16,5);
+
+  if(page==='vectors') {
+    mk('ch-vec-dims','bar',{
+      labels:['384','512','768','1024','1536','2048'],
+      datasets:[{
+        label:'Collections',
+        data:[180100,0,900444,200000,2632123,320000],
+        backgroundColor:['#38bdf8','#a89cfa','#1fdb98','#f59e0b','#7c6af7','#f472b6'],
+        borderRadius:5
+      }]
+    }, {scales:{x:{grid:{display:false},ticks:{color:'#6a7080',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10},callback:v=>v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?Math.round(v/1000)+'K':v}}}});
+  }
+
+  if(page==='search') {
+    initSearchScoreChart([]);
+  }
+
+  if(page==='indexes') {
+    // Memory footprint
+    mk('ch-idx-mem','bar',{
+      labels:['ivf-primary','ivf-staging','flat-semantic','ivf-images','code-flat'],
+      datasets:[{data:[8.4,1.9,2.7,5.2,0.3],backgroundColor:['#7c6af7','#a89cfa','#1fdb98','#f59e0b','#38bdf8'],borderRadius:4}]
+    }, {indexAxis:'y',scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10},callback:v=>v+' GB'}},y:{grid:{display:false},ticks:{color:'#6a7080',font:{size:10,family:'JetBrains Mono'}}}}});
+    // QPS vs Recall scatter
+    mk('ch-idx-perf','scatter',{
+      datasets:[
+        {label:'IVF256',data:[{x:0.94,y:148000}],backgroundColor:'#7c6af7',pointRadius:8,pointHoverRadius:10},
+        {label:'IVF128',data:[{x:0.91,y:210000}],backgroundColor:'#a89cfa',pointRadius:8,pointHoverRadius:10},
+        {label:'Flat',  data:[{x:1.0, y:28000}], backgroundColor:'#1fdb98',pointRadius:8,pointHoverRadius:10},
+        {label:'IVF512',data:[{x:0.97,y:98000}], backgroundColor:'#f59e0b',pointRadius:8,pointHoverRadius:10},
+      ]
+    }, {scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10},callback:v=>v.toFixed(2)},title:{display:true,text:'Recall@10',color:'#6a7080',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10},callback:v=>Math.round(v/1000)+'K'},title:{display:true,text:'QPS',color:'#6a7080',font:{size:10}}}},plugins:{...CD.plugins,legend:{display:true,labels:{color:'#b2b8c8',font:{size:10},boxWidth:8,boxHeight:8}}}});
+  }
+
+  if(page==='router') {
+    mk('ch-router-ratio','line',{
+      labels:L16,
+      datasets:[
+        {label:'GPU',data:RA(16,70,83),borderColor:'#7c6af7',borderWidth:1.5,fill:true,backgroundColor:'rgba(124,106,247,0.1)',tension:0.4,pointRadius:0},
+        {label:'CPU',data:RA(16,12,22),borderColor:'#38bdf8',borderWidth:1.5,fill:true,backgroundColor:'rgba(56,189,248,0.07)',tension:0.4,pointRadius:0},
+        {label:'Cache',data:RA(16,28,38),borderColor:'#2dd4bf',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0,borderDash:[4,3]},
+      ]
+    }, gridOpts(v=>v+'%'));
+
+    mk('ch-router-latency','bar',{
+      labels:['GPU','CPU cached','CPU fresh','Timeout'],
+      datasets:[
+        {label:'p50',data:[1.2,0.8,4.1,102],backgroundColor:'rgba(31,219,152,0.7)',borderRadius:3},
+        {label:'p99',data:[3.8,2.1,14.2,200],backgroundColor:'rgba(245,101,101,0.6)',borderRadius:3},
+      ]
+    },{plugins:{...CD.plugins,legend:{display:true,labels:{color:'#b2b8c8',font:{size:10},boxWidth:8,boxHeight:8}}},scales:{x:{grid:{display:false},ticks:{color:'#6a7080',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10},callback:v=>v+'ms'}}}});
+  }
+
+  if(page==='performance') {
+    mk('ch-perf-lat','line',{
+      labels:L16,
+      datasets:[
+        {label:'p50',data:RA(16,0.9,1.6),borderColor:'#1fdb98',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+        {label:'p95',data:RA(16,2.8,5.2),borderColor:'#f59e0b',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+        {label:'p99',data:RA(16,9,16),   borderColor:'#f56565',borderWidth:2,  fill:false,tension:0.4,pointRadius:0},
+      ]
+    }, {...gridOpts(v=>v.toFixed(1)+'ms'),plugins:{...CD.plugins,legend:{display:true,labels:{color:'#b2b8c8',font:{size:10},boxWidth:8,boxHeight:8}}}});
+
+    mk('ch-perf-qps','line',{
+      labels:L16,
+      datasets:[{label:'QPS',data:RAI(16,132000,150000),borderColor:'#1fdb98',borderWidth:1.5,fill:true,backgroundColor:'rgba(31,219,152,0.08)',tension:0.4,pointRadius:0}]
+    }, gridOpts(v=>Math.round(v/1000)+'K'));
+
+    mk('ch-perf-hist','bar',{
+      labels:['0-1','1-2','2-3','3-5','5-10','10-20','20-50','50+'],
+      datasets:[{label:'Queries',data:[8200,24300,31100,18400,9200,3800,1200,400],backgroundColor:'rgba(124,106,247,0.7)',borderRadius:3}]
+    },{scales:{x:{grid:{display:false},ticks:{color:'#6a7080',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10}}}}});
+
+    mk('ch-perf-mem','line',{
+      labels:L16,
+      datasets:[
+        {label:'RAM',data:RA(16,17,19.5),borderColor:'#f472b6',borderWidth:1.5,fill:true,backgroundColor:'rgba(244,114,182,0.08)',tension:0.4,pointRadius:0},
+        {label:'Threads',data:RA(16,38,55),borderColor:'#38bdf8',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0,yAxisID:'y2'},
+      ]
+    },{plugins:{...CD.plugins,legend:{display:true,labels:{color:'#b2b8c8',font:{size:10},boxWidth:8,boxHeight:8}}},scales:{
+      x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10},maxTicksLimit:6}},
+      y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10},callback:v=>v+'GB'},position:'left'},
+      y2:{grid:{display:false},ticks:{color:'#6a7080',font:{size:10},callback:v=>v+'%'},position:'right'}
+    }});
+  }
+
+  if(page==='gpu') {
+    mk('ch-gpu-vram','line',{
+      labels:L16,
+      datasets:[
+        {label:'GPU-0',data:RA(16,44,50),borderColor:'#7c6af7',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+        {label:'GPU-1',data:RA(16,35,42),borderColor:'#1fdb98',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+        {label:'GPU-2',data:RA(16,68,75),borderColor:'#f56565',borderWidth:2,  fill:false,tension:0.4,pointRadius:0},
+        {label:'GPU-3',data:RA(16,20,26),borderColor:'#38bdf8',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+      ]
+    }, {...gridOpts(v=>v+'GB'),plugins:{...CD.plugins,legend:{display:true,labels:{color:'#b2b8c8',font:{size:10},boxWidth:8,boxHeight:8}}}});
+
+    mk('ch-gpu-compute','line',{
+      labels:L16,
+      datasets:[
+        {label:'GPU-0',data:RAI(16,72,84),borderColor:'#7c6af7',borderWidth:1.5,fill:true,backgroundColor:'rgba(124,106,247,0.06)',tension:0.4,pointRadius:0},
+        {label:'GPU-1',data:RAI(16,50,62),borderColor:'#1fdb98',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+        {label:'GPU-2',data:RAI(16,85,95),borderColor:'#f56565',borderWidth:2,  fill:true,backgroundColor:'rgba(245,101,101,0.06)',tension:0.4,pointRadius:0},
+        {label:'GPU-3',data:RAI(16,25,36),borderColor:'#38bdf8',borderWidth:1.5,fill:false,tension:0.4,pointRadius:0},
+      ]
+    }, {...gridOpts(v=>v+'%'),plugins:{...CD.plugins,legend:{display:true,labels:{color:'#b2b8c8',font:{size:10},boxWidth:8,boxHeight:8}}}});
+  }
+
+  if(page==='cluster') {
+    mk('ch-net','line',{
+      labels:L16,
+      datasets:[
+        {label:'In',  data:RA(16,120,200),borderColor:'#1fdb98',borderWidth:1.5,fill:true,backgroundColor:'rgba(31,219,152,0.08)',tension:0.4,pointRadius:0},
+        {label:'Out', data:RA(16,80,150), borderColor:'#38bdf8',borderWidth:1.5,fill:true,backgroundColor:'rgba(56,189,248,0.06)',tension:0.4,pointRadius:0},
+      ]
+    }, {...gridOpts(v=>v+' MB/s'),plugins:{...CD.plugins,legend:{display:true,labels:{color:'#b2b8c8',font:{size:10},boxWidth:8,boxHeight:8}}}});
+  }
+
+  if(page==='alerts') {
+    mk('ch-alert-vol','bar',{
+      labels:['00','02','04','06','08','10','12','14','16','18','20','22'],
+      datasets:[
+        {label:'Critical',data:[0,0,1,0,0,2,1,0,0,1,0,1],backgroundColor:'rgba(245,101,101,0.7)',borderRadius:3},
+        {label:'Warning', data:[1,2,1,0,1,3,2,1,2,1,1,0],backgroundColor:'rgba(245,158,11,0.6)',borderRadius:3},
+        {label:'Info',    data:[2,1,3,1,2,4,3,2,1,2,3,2],backgroundColor:'rgba(56,189,248,0.4)',borderRadius:3},
+      ]
+    },{plugins:{...CD.plugins,legend:{display:true,labels:{color:'#b2b8c8',font:{size:10},boxWidth:8,boxHeight:8}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:'#6a7080',font:{size:10}}},y:{stacked:true,grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10}}}}});
+
+    mk('ch-alert-types','doughnut',{
+      labels:['GPU Memory','Latency','Node Health','Index Error','Rate Limit'],
+      datasets:[{data:[35,28,18,12,7],backgroundColor:['#f56565','#f59e0b','#f472b6','#7c6af7','#38bdf8'],borderWidth:0,hoverBorderWidth:2,hoverBorderColor:'#fff'}]
+    },{cutout:'60%',plugins:{...CD.plugins,legend:{display:true,position:'right',labels:{color:'#b2b8c8',font:{size:10},boxWidth:8,boxHeight:8,padding:8}}}});
+  }
+
+  if(page==='apikeys') {
+    mk('ch-api-usage','bar',{
+      labels:['Production API','Analytics Service','Dev / Staging','CI Test Runner'],
+      datasets:[{
+        data:[12483291,4291048,83120,2400],
+        backgroundColor:['rgba(124,106,247,0.75)','rgba(31,219,152,0.65)','rgba(56,189,248,0.65)','rgba(245,158,11,0.65)'],
+        borderRadius:5
+      }]
+    },{indexAxis:'y',scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10},callback:v=>v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?Math.round(v/1000)+'K':v}},y:{grid:{display:false},ticks:{color:'#b2b8c8',font:{size:11}}}}});
+  }
+}
+
+// ─── SEARCH ───
+function initSearchScoreChart(scores) {
+  const data = scores.length ? scores : Array(10).fill(0);
+  mk('ch-search-scores','bar',{
+    labels: scores.length ? scores.map((_,i)=>`#${i+1}`) : Array.from({length:10},(_,i)=>`#${i+1}`),
+    datasets:[{
+      label:'Similarity',
+      data,
+      backgroundColor: data.map(v=>{
+        if(v>=0.9) return 'rgba(31,219,152,0.8)';
+        if(v>=0.7) return 'rgba(124,106,247,0.75)';
+        if(v>=0.5) return 'rgba(56,189,248,0.65)';
+        return 'rgba(106,112,128,0.5)';
+      }),
+      borderRadius:4
+    }]
+  },{scales:{x:{grid:{display:false},ticks:{color:'#6a7080',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6a7080',font:{size:10},callback:v=>v.toFixed(2)},min:0,max:1}}});
+}
+
+function runSearch() {
+  const k = parseInt(document.getElementById('search-k').value)||10;
+  const metric = document.getElementById('search-metric').value;
+  const collection = document.getElementById('search-collection').value;
+  const latency = (Math.random()*2.5+0.8).toFixed(1);
+  const exec = Math.random()>0.25 ? 'GPU' : 'CPU';
+  const candidates = exec==='GPU' ? RI(4096,16384) : RI(512,2048);
+
+  // Generate scores
+  const scores = Array.from({length:k},(_,i)=>
+    Math.max(0.05, 0.99 - i*(0.05+Math.random()*0.04))
+  ).map(s=>Math.round(s*10000)/10000);
+
+  // Render results
+  const ids = Array.from({length:k},()=>Math.random().toString(36).slice(2,8));
+  const container = document.getElementById('search-results');
+  container.innerHTML = scores.map((s,i)=>{
+    const pct = Math.round(s*100);
+    const col = s>=0.9?'#1fdb98':s>=0.7?'#a89cfa':s>=0.5?'#38bdf8':'#6a7080';
+    return `<div class="result-row">
+      <span class="rk">#${i+1}</span>
+      <span class="rid">vec_${ids[i]}</span>
+      <div class="rsbar"><div class="rsfill" style="width:${pct}%;background:${col}"></div></div>
+      <span class="rsval">${s.toFixed(4)}</span>
+    </div>`;
+  }).join('');
+
+  // Update meta
+  document.getElementById('search-meta').textContent = `${latency}ms · ${exec} · ${k} hits`;
+  document.getElementById('ss-exec').textContent = exec;
+  document.getElementById('ss-exec').className = 'badge '+(exec==='GPU'?'p':'b');
+  document.getElementById('ss-index').textContent = collection==='semantic-search'?'Flat':'IVF256';
+  document.getElementById('ss-candidates').textContent = candidates.toLocaleString();
+  document.getElementById('ss-latency').textContent = latency+'ms';
+  document.getElementById('ss-metric').textContent = metric.split(' ')[0];
+
+  // Update chart
+  initSearchScoreChart(scores);
+
+  // Render heatmap
+  renderHeatmap(scores.slice(0,8));
+  toast(`Search completed in ${latency}ms via ${exec}`,'success');
+}
+
+function renderHeatmap(scores) {
+  const container = document.getElementById('heatmap-container');
+  const cols = 32, rows = scores.length;
+  let html = `<div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:2px;min-width:${cols*18}px">`;
+  for(let r=0;r<rows;r++) {
+    for(let c=0;c<cols;c++) {
+      const v = scores[r] * (0.5 + 0.5*Math.random());
+      const a = Math.round(v*100)/100;
+      const col = v>0.8?'#1fdb98':v>0.6?'#7c6af7':v>0.4?'#38bdf8':v>0.2?'#3d4252':'#1e222a';
+      html += `<div class="hm-cell" title="Result #${r+1}, dim ${c+1}: ${a.toFixed(2)}" style="height:22px;background:${col};opacity:${Math.max(0.2,v)}"></div>`;
+    }
+  }
+  html += '</div>';
+  html += `<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:10px;color:var(--t2)">
+    <span>Low similarity</span>
+    <div style="flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg,#1e222a,#3d4252,#38bdf8,#7c6af7,#1fdb98)"></div>
+    <span>High similarity</span>
+  </div>`;
+  container.innerHTML = html;
+}
+
+function randomVec() {
+  const dims = 16;
+  const vals = Array.from({length:dims},()=>(Math.round((Math.random()*2-1)*1000)/1000)).join(', ');
+  document.getElementById('vec-input').value = `[${vals}, ...]`;
+  toast('Random vector generated','success');
+}
+
+// ─── INDEX ACTIONS ───
+function rebuildIndex(name) {
+  toast(`Rebuilding ${name} — this may take a few minutes`, 'warn');
+  let pct = 0;
+  clearInterval(rebuildInterval);
+  const bar = document.getElementById('rebuild-bar');
+  const label = document.getElementById('rebuild-pct');
+  const status = document.getElementById('idx-images-status');
+  rebuildInterval = setInterval(()=>{
+    pct += RI(3,8);
+    if(pct>=100){pct=100;clearInterval(rebuildInterval);
+      if(status) status.innerHTML='<span class="badge g">● Trained</span>';
+      toast(`Index ${name} rebuild complete!`,'success');
+    } else if(status) status.textContent=`⟳ Rebuilding ${pct}%`;
+    if(bar) bar.style.width=pct+'%';
+    if(label) label.textContent=pct+'%';
+  }, 400);
+}
+
+function cancelRebuild() {
+  clearInterval(rebuildInterval);
+  const status = document.getElementById('idx-images-status');
+  if(status) status.textContent='Cancelled';
+  toast('Index rebuild cancelled','warn');
+}
+
+function applyIndexConfig() {
+  toast('Index configuration applied — rebuild queued','success');
+}
+
+// ─── UPLOAD ───
+function simulateUpload() {
+  if(uploadPct>0&&uploadPct<100) return;
+  uploadPct = 0; uploadPaused = false;
+  const section = document.getElementById('upload-section');
+  section.style.display='block';
+  document.getElementById('upload-filename').textContent='embeddings-batch-'+(RI(1,99)+'.npy');
+  clearInterval(uploadInterval);
+  uploadInterval = setInterval(()=>{
+    if(uploadPaused) return;
+    uploadPct += RI(1,5);
+    if(uploadPct>=100) { uploadPct=100; clearInterval(uploadInterval);
+      toast('Upload complete — 200,000 vectors ingested','success');
+      document.getElementById('upload-eta').textContent='Complete ✓';
+    } else {
+      const remaining = Math.round((100-uploadPct)*0.8);
+      document.getElementById('upload-eta').textContent=`Estimated: ${remaining}s remaining · ${(RI(30,60)/10).toFixed(1)} MB/s`;
+    }
+    document.getElementById('upload-bar').style.width=uploadPct+'%';
+    document.getElementById('upload-pct').textContent=uploadPct+'%';
+  }, 200);
+}
+
+function pauseUpload() {
+  uploadPaused = !uploadPaused;
+  toast(uploadPaused?'Upload paused':'Upload resumed', uploadPaused?'warn':'success');
+}
+
+function cancelUpload() {
+  clearInterval(uploadInterval); uploadPct=0;
+  document.getElementById('upload-section').style.display='none';
+  toast('Upload cancelled','warn');
+}
+
+// ─── ROUTER ───
+function simulateRouterUpdate() {
+  const batch = document.getElementById('rt-batch').value;
+  const ceil = document.getElementById('rt-ceil').value;
+  toast(`Simulating routing: batch≥${batch} → GPU, failover at ${ceil}%`, 'success');
+  document.getElementById('rd-incoming').textContent = RI(138,148)+'K';
+}
+
+function saveRouterConfig() {
+  toast('Router configuration saved and applied','success');
+}
+
+// ─── ALERTS ───
+function filterAlerts(sev) {
+  document.querySelectorAll('#alerts-list .al-row').forEach(row=>{
+    const rowSev = row.dataset.sev||'info';
+    row.style.display = (sev==='all' || rowSev===sev) ? '' : 'none';
+  });
+}
+
+function ackAlert(btn) {
+  const row = btn.closest('.al-row');
+  row.style.opacity='0.5';
+  btn.textContent='Acked'; btn.disabled=true;
+  activeAlerts = Math.max(0, activeAlerts-1);
+  document.getElementById('nb-alerts').textContent = activeAlerts;
+  if(activeAlerts===0) document.getElementById('nb-alerts').style.display='none';
+  const sev = row.dataset.sev;
+  if(sev==='critical') {
+    const el=document.getElementById('alert-crit-count');
+    if(el) el.textContent=Math.max(0,parseInt(el.textContent)-1);
+  } else if(sev==='warning') {
+    const el=document.getElementById('alert-warn-count');
+    if(el) el.textContent=Math.max(0,parseInt(el.textContent)-1);
+  }
+  toast('Alert acknowledged','success');
+}
+
+function ackAllAlerts() {
+  document.querySelectorAll('#alerts-list .al-row [onclick*=ackAlert]').forEach(btn=>{
+    if(!btn.disabled) ackAlert(btn);
+  });
+}
+
+// ─── CONFIG ───
+function saveConfig() {
+  toast('Configuration saved — changes applied live','success');
+}
+
+// ─── API KEYS ───
+function revokeKey(name) {
+  if(confirm(`Revoke API key "${name}"? This cannot be undone.`)) {
+    toast(`API key "${name}" revoked`,'warn');
+  }
+}
+
+// ─── GPU REFRESH ───
+function refreshGPU() {
+  toast('GPU telemetry refreshed','success');
+}
+
+// ─── COLLECTION DETAIL ───
+function showCollectionDetail(name) {
+  openModal('collection-detail', name);
+}
+
+// ─── MODAL ───
+const MODALS = {
+  'new-collection': ()=>`
+    <span class="modal-close" onclick="closeModal()">✕</span>
+    <div class="modal-title">New Collection</div>
+    <div class="form-row"><div class="form-label">Collection Name</div><input class="ctrl-input" placeholder="my-collection" style="width:100%"></div>
+    <div class="form-row"><div class="form-label">Dimensions</div><input class="ctrl-input" type="number" value="1536" style="width:100%"></div>
+    <div class="form-row"><div class="form-label">Distance Metric</div>
+      <select class="ctrl-select" style="width:100%"><option>Cosine</option><option>L2</option><option>Inner Product</option></select>
+    </div>
+    <div class="form-row"><div class="form-label">Index Type</div>
+      <select class="ctrl-select" style="width:100%"><option>IVF256 (recommended)</option><option>Flat (exact)</option><option>IVF512</option></select>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="createCollection()">Create Collection</button>
+    </div>`,
+  'build-index': ()=>`
+    <span class="modal-close" onclick="closeModal()">✕</span>
+    <div class="modal-title">Build New Index</div>
+    <div class="form-row"><div class="form-label">Collection</div>
+      <select class="ctrl-select" style="width:100%"><option>embeddings-prod</option><option>semantic-search</option><option>documents-raw</option></select>
+    </div>
+    <div class="form-row"><div class="form-label">Index Type</div>
+      <select class="ctrl-select" style="width:100%"><option>IVF256</option><option>IVF512</option><option>Flat</option><option>IVF128</option></select>
+    </div>
+    <div class="form-row"><div class="form-label">nlist</div><input class="ctrl-input" type="number" value="256" style="width:100%"></div>
+    <div class="form-row"><div class="form-label">Training samples</div><input class="ctrl-input" type="number" value="65536" style="width:100%"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="closeModal();toast('Index build queued','success')">Start Build</button>
+    </div>`,
+  'new-key': ()=>`
+    <span class="modal-close" onclick="closeModal()">✕</span>
+    <div class="modal-title">Create API Key</div>
+    <div class="form-row"><div class="form-label">Key Name</div><input class="ctrl-input" placeholder="e.g. Production API" style="width:100%"></div>
+    <div class="form-row"><div class="form-label">Permissions</div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t1);cursor:pointer"><input type="checkbox" checked> Read</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t1);cursor:pointer"><input type="checkbox"> Write</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t1);cursor:pointer"><input type="checkbox"> Admin</label>
+      </div>
+    </div>
+    <div class="form-row"><div class="form-label">QPS Limit</div><input class="ctrl-input" type="number" value="1000" style="width:100%"></div>
+    <div class="form-row"><div class="form-label">Expiry</div>
+      <select class="ctrl-select" style="width:100%"><option>No expiry</option><option>30 days</option><option>90 days</option><option>1 year</option></select>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="closeModal();toast('API key created','success')">Create Key</button>
+    </div>`,
+  'collection-detail': (name)=>`
+    <span class="modal-close" onclick="closeModal()">✕</span>
+    <div class="modal-title">Collection: ${name}</div>
+    <table class="tbl" style="margin-bottom:12px">
+      <tr><td class="dim">Vectors</td><td class="mono">${name==='embeddings-prod'?'2,144,832':'487,291'}</td></tr>
+      <tr><td class="dim">Dimensions</td><td class="mono">1536</td></tr>
+      <tr><td class="dim">Index</td><td><span class="badge p">IVF256</span></td></tr>
+      <tr><td class="dim">Distance</td><td class="mono">Cosine</td></tr>
+      <tr><td class="dim">Memory</td><td class="mono">${name==='embeddings-prod'?'8.4 GB':'1.9 GB'}</td></tr>
+      <tr><td class="dim">Created</td><td class="mono">2024-11-03</td></tr>
+    </table>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn danger" onclick="closeModal();toast('Collection deleted','warn')">Delete</button>
+      <button class="btn" onclick="closeModal()">Close</button>
+    </div>`,
+};
+
+function openModal(type, arg) {
+  const fn = MODALS[type];
+  if(!fn) return;
+  document.getElementById('modal-content').innerHTML = fn(arg);
+  document.getElementById('modal-bg').classList.add('open');
+}
+function closeModal() { document.getElementById('modal-bg').classList.remove('open'); }
+function closeModalBg(e) { if(e.target.id==='modal-bg') closeModal(); }
+
+function createCollection() {
+  closeModal();
+  toast('Collection created successfully','success');
+}
+
+// ─── TOAST ───
+function toast(msg, type='success') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  const icon = type==='success'?'✓':type==='warn'?'⚡':'⚠';
+  const col = type==='success'?'var(--green)':type==='warn'?'var(--amber)':'var(--red)';
+  t.innerHTML = `<span style="color:${col};font-size:14px">${icon}</span><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(()=>{
+    t.style.animation='toastOut 0.2s ease-in forwards';
+    setTimeout(()=>t.remove(),200);
+  }, 3000);
+}
+
+// ─── LIVE DATA SIMULATION ───
+function refreshLiveData() {
+  const tp = RI(138000,148000);
+  const lat = (Math.round(R(18,30))/10).toFixed(1);
+  const gpu = RI(72,88);
+  const cpu = RI(28,42);
+  const q = RI(210,290);
+  const el = id => document.getElementById(id);
+  if(el('mv-throughput')) el('mv-throughput').textContent = tp.toLocaleString();
+  if(el('mv-latency')) el('mv-latency').textContent = lat;
+  if(el('mv-gpu')) el('mv-gpu').textContent = gpu;
+  if(el('mv-cpu')) el('mv-cpu').textContent = cpu;
+  if(el('mv-queries')) el('mv-queries').textContent = q;
+  if(el('rd-incoming')) el('rd-incoming').textContent = Math.round(tp/1000)+'K';
+}
+
+// ─── RANGE SELECTORS ───
+function updateLatencyRange(v) { /* re-init with different data density */
+  const L = timeLabels(parseInt(v)/5, 5);
+  const c = CHARTS['ch-latency'];
+  if(!c) return;
+  c.data.labels = L;
+  c.data.datasets[0].data = RA(L.length,0.8,1.8);
+  c.data.datasets[1].data = RA(L.length,2.5,5.5);
+  c.data.datasets[2].data = RA(L.length,8,18);
+  c.update();
+}
+
+function updateThroughputRange(v) {
+  const L = timeLabels(parseInt(v)/5, 5);
+  const c = CHARTS['ch-throughput'];
+  if(!c) return;
+  c.data.labels = L;
+  c.data.datasets[0].data = RAI(L.length,132000,155000);
+  c.update();
+}
+
+function updatePerfRange(v) {
+  const n = v==='1h'?16:v==='6h'?24:32;
+  const L = timeLabels(n, v==='1h'?5:v==='6h'?15:45);
+  ['ch-perf-lat','ch-perf-qps'].forEach(id=>{
+    const c = CHARTS[id];
+    if(!c) return;
+    c.data.labels = L;
+    c.data.datasets.forEach(ds => {
+      if(ds.label==='QPS') ds.data = RAI(n,132000,150000);
+      else if(ds.label==='p50') ds.data = RA(n,0.9,1.6);
+      else if(ds.label==='p95') ds.data = RA(n,2.8,5.2);
+      else if(ds.label==='p99') ds.data = RA(n,9,16);
+    });
+    c.update();
+  });
+}
+
+// ─── BOOT ───
+document.addEventListener('DOMContentLoaded',()=>{
+  PAGE_INITS['dashboard'] = true;
+  initDashboard();
+  liveInterval = setInterval(()=>{
+    if(document.getElementById('pg-dashboard')?.classList.contains('active')) {
+      refreshLiveData();
+    }
+  }, 3000);
+
+  // Start index rebuild animation
+  setTimeout(()=>{
+    if(document.getElementById('pg-indexes')?.classList.contains('active')) {
+      rebuildIndex('ivf-images');
+    }
+  }, 1000);
+});
+</script>
+</body>
+</html>
