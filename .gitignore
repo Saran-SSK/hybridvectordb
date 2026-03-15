@@ -135,30 +135,6 @@ celerybeat.pid
 
 # mypy
 .mypy_cache/
-.dmypy.json
-dmypy.json
 
 # Pyre
 .pyre/
-
-# Frontend specific exceptions (allow frontend files)
-!frontend/
-!frontend/**/
-!frontend/src/
-!frontend/src/**/
-!frontend/lib/
-!frontend/lib/**/
-
-# Node.js specific (for frontend)
-frontend/node_modules/
-frontend/.next/
-frontend/out/
-frontend/build/
-frontend/dist/
-frontend/.env.local
-frontend/.env.development.local
-frontend/.env.test.local
-frontend/.env.production.local
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
